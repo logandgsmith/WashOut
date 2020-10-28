@@ -1,19 +1,46 @@
 import React, { Component } from 'react';
+import fallingObject from "./Objects.js";
+
 
 //MUST PRESS RIGHT OR LEFT ARROW TO RENDER HAMPERMAN IN FRAME
+
+//get png from url source
 var hampImage = new Image();
 hampImage.src = "https://i.imgur.com/EKlTCEr.png";
 
+
+var importedCanvasX = 650;
+var importedCanvasY = 800;
+var numObj = 5;
+
+
+var objArr = [];
+ 
+
+
+for (var i = 0; i < numObj; i++){
+    objArr[i] =  new fallingObject(Math.random() * importedCanvasX,50,20,0,650,800)
+    
+};
+
+
+
 class Game extends Component {
 
+ 
+
+
+    //array of falling object
 
     state = {
-        canvasX: 650,
+        
+        canvasX: importedCanvasX,
         canvasY: 800,
         defaultX: 325,
         defaultY: 50,
-        gravity: 0.6,
+        gravity: 0.5,
         charScale: 100,
+        fallingObjNum: 10,
 
         //At some point the x values will have to be set to some proportionality of the window size
         //that might have to be different for different devices
@@ -24,15 +51,6 @@ class Game extends Component {
         //Or name fallingObj0,FallingObj1 etc. and have for loops that go through and update the positions of each obj
 
 
-        fallingObj: {
-            //just setting attribuites for ctx.arc to draw a circle 
-            //could probably be used later for hitboxes, after we implement sprites
-            //random x value in canvas area
-            x: 50,
-            y: 50,
-            radius: 20,
-            velocity: 0,
-        },
 
         character: {
             //just setting attribuites for ctx.arc to draw a circle 
@@ -45,7 +63,13 @@ class Game extends Component {
             velocity: 0,
         }
     }
+
+randX = () => {
+ return Math.random() * this.state.canvasX
+}
+
 draw = () => {
+
         //not sure what is meant by refs being deprecated
         //but the code breaks without refs
         const ctx = this.refs.canvas.getContext("2d");
@@ -53,12 +77,18 @@ draw = () => {
         ctx.fillStyle = "grey";
         ctx.fillRect(0, 0, this.refs.canvas.width, this.refs.canvas.height);  
         //ball color
-        ctx.fillStyle = "green";
-        ctx.beginPath();
-        //creates outline arc for falling obj
-        ctx.arc(this.state.fallingObj.x, this.state.fallingObj.y,     this.state.fallingObj.radius, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.stroke();  
+        //loop for falling objects
+        for(var i = 0; i < objArr.length; i++)
+        {
+            ctx.fillStyle = "green";
+            ctx.beginPath();
+            //creates outline arc for falling obj
+            ctx.arc(objArr[i].x + (i), objArr[i].y,     objArr[i].radius, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+        };
+        
+ 
 
         //drawing hamperman image
         ctx.drawImage(hampImage,0,0,640,640,
@@ -73,38 +103,43 @@ draw = () => {
     //update is called every frame
 update = () => {
 
-let newV = (this.state.fallingObj.velocity + this.state.gravity) * 0.9
-this.setState({
-    //in here we update the falling object attributes for each frame
-    fallingObj: {
-        x:this.state.fallingObj.x,
-        y:// math functions min/max to set boundaries on ball 
-        //chooses max value between Math.min function and 0
-        Math.max(
-            //choose min value between these two
-            Math.min(this.state.fallingObj.y + newV,this.refs.canvas.height - this.state.fallingObj.radius),
+//for loop to iterate through falling object array and set new velocities
+
+for(var i = 0; i < objArr.length; i++)
+{
+
+
+        
+    var newVal = ((objArr[i].velocity + this.state.gravity) * 0.9)
+    objArr[i].setVelocity(newVal)
+
+    //find the y value making sure it is not out of frame
+    var y = Math.max(
+        Math.min(
+            objArr[i].y + objArr[i].velocity,
+            this.refs.canvas.height - objArr[i].radius),
             0
-            ),
-        velocity: newV,
-        radius: 20,
-            }
+    )
+    objArr[i].setY(y)
 
-    });
-    //if object falls to level of character, go back to default y value and random x value
-    if(this.state.fallingObj.y >= this.state.canvasY - this.state.character.radius)
-    {
-        this.setState({
-            fallingObj: {
-                //random x value in canvas area
-                x:Math.floor(Math.random() * this.state.canvasX),
-                y: this.state.defaultY,
-                velocity: newV,
-                radius: 20,
-            }
-        });
+         //check if object has fallen to level of character
+         if(objArr[i].y >= this.state.canvasY - this.state.character.radius)
+         {
+             objArr[i].setRandomX()
+             //to be updated for random Y values
+             objArr[i].setY(objArr[i].defaultY)
+             continue;
+         };
 
-    }
+
 }
+
+
+
+}
+
+
+
 listen = () => {
     //keycode for left arrow
         document.addEventListener("keydown", e =>
@@ -131,7 +166,9 @@ listen = () => {
             }
           }) : null
         );
-}
+};
+
+
 
 //Not exactly sure why componentDidMount was used 
 //This is what requires component to be defined

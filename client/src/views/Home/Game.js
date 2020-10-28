@@ -12,7 +12,7 @@ class Game extends Component {
         canvasY: 800,
         defaultX: 325,
         defaultY: 50,
-        gravity: 0.6,
+        gravity: 0.1,
         charScale: 100,
 
         //At some point the x values will have to be set to some proportionality of the window size
@@ -133,6 +133,17 @@ listen = () => {
         );
 }
 
+// Checking if the object has gotten within the sprite of player character
+checkCollisions = () => {
+    if(Math.abs((this.state.fallingObj.x + this.state.fallingObj.radius) - (this.state.character.x + this.state.character.radius)) <= this.state.character.radius
+        && Math.abs(this.state.fallingObj.y - this.state.character.y) <= this.state.character.radius) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 //Not exactly sure why componentDidMount was used 
 //This is what requires component to be defined
 //render() also must be defined with this    
@@ -141,6 +152,8 @@ componentDidMount() {
         this.update();
         this.draw();
         //personally added to test event listener functionallity
+
+        console.log(this.checkCollisions())
 
     }, 1000 / 60); //1000 milliseconds divided by 60 seconds = 60fps
 

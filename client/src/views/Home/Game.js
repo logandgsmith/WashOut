@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 //MUST PRESS RIGHT OR LEFT ARROW TO RENDER HAMPERMAN IN FRAME
 var hampImage = new Image();
 hampImage.src = "https://i.imgur.com/EKlTCEr.png";
+var score = 0;
 
 class Game extends Component {
 
@@ -44,6 +45,14 @@ class Game extends Component {
             radius: 20,
             velocity: 0,
         }
+    }
+
+    // Drawing score at top left of canvas
+drawScore = () =>{
+        var ctx = this.refs.canvas.getContext("2d")
+        ctx.font = "16px Arial"
+        ctx.fillStyle = "#FFFFFF"
+        ctx.fillText("Score: " + score, 50, 50);
     }
 draw = () => {
         //not sure what is meant by refs being deprecated
@@ -140,10 +149,19 @@ componentDidMount() {
     setInterval(() =>{
         this.update();
         this.draw();
+        this.drawScore();
         //personally added to test event listener functionallity
 
     }, 1000 / 60); //1000 milliseconds divided by 60 seconds = 60fps
+    
+    // For increasing the score every half a second
+    // timer will be used for the function that stops the timer
+    let timer=setInterval(function (){
+        score++;
+    },500);
 
+
+    
     this.listen();
     }
 render() {

@@ -32,6 +32,7 @@ class Game extends Component {
             y: 50,
             radius: 20,
             velocity: 0,
+            collectable: false,
         },
 
         character: {
@@ -45,6 +46,7 @@ class Game extends Component {
             velocity: 0,
         }
     }
+    
 draw = () => {
         //not sure what is meant by refs being deprecated
         //but the code breaks without refs
@@ -53,7 +55,12 @@ draw = () => {
         ctx.fillStyle = "grey";
         ctx.fillRect(0, 0, this.refs.canvas.width, this.refs.canvas.height);  
         //ball color
-        ctx.fillStyle = "green";
+        // Determines ball color depending whether its a collectible or not
+        if(this.state.fallingObj.collectable === true){
+            ctx.fillStyle = "green";
+        }else{
+            ctx.fillStyle = "red";
+        }
         ctx.beginPath();
         //creates outline arc for falling obj
         ctx.arc(this.state.fallingObj.x, this.state.fallingObj.y,     this.state.fallingObj.radius, 0, 2 * Math.PI);
@@ -73,6 +80,7 @@ draw = () => {
     //update is called every frame
 update = () => {
 
+let generator = Math.random() * 100;
 let newV = (this.state.fallingObj.velocity + this.state.gravity) * 0.9
 this.setState({
     //in here we update the falling object attributes for each frame
@@ -87,21 +95,38 @@ this.setState({
             ),
         velocity: newV,
         radius: 20,
-            }
+        collectable: this.state.fallingObj.collectable,    
+    }
 
     });
     //if object falls to level of character, go back to default y value and random x value
     if(this.state.fallingObj.y >= this.state.canvasY - this.state.character.radius)
     {
-        this.setState({
-            fallingObj: {
-                //random x value in canvas area
-                x:Math.floor(Math.random() * this.state.canvasX),
-                y: this.state.defaultY,
-                velocity: newV,
-                radius: 20,
-            }
-        });
+        // Chooses whether the next fallingObject will be a collectible or an obstacle
+        generator = Math.random() * 100;
+        if(generator <= 50){
+            this.setState({
+                fallingObj: {
+                    //random x value in canvas area
+                    x:Math.floor(Math.random() * this.state.canvasX),
+                    y: this.state.defaultY,
+                    velocity: newV,
+                    radius: 20,
+                    collectable: false,
+                }
+            });
+        }else{
+            this.setState({
+                fallingObj: {
+                    //random x value in canvas area
+                    x:Math.floor(Math.random() * this.state.canvasX),
+                    y: this.state.defaultY,
+                    velocity: newV,
+                    radius: 20,
+                    collectable: true,
+                }
+            });
+        }
 
     }
 }

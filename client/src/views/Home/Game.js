@@ -4,9 +4,21 @@ import fallingObject from "./Objects.js";
 //MUST PRESS RIGHT OR LEFT ARROW TO RENDER HAMPERMAN IN FRAME
 
 
-//get png from url source
-var hampImage = new Image();
-hampImage.src = "https://i.imgur.com/EKlTCEr.png";
+//-------------SPRITES FOR CHARACTER MOVEMENT---------------------// 
+var hampImage   = new Image();
+var hampLeft1   = new Image();
+var hampLeft2   = new Image();
+var hampRight1  = new Image();
+var hampRight2  = new Image();
+hampImage.src   = "https://i.imgur.com/EKlTCEr.png";
+hampLeft1.src   = "https://i.imgur.com/hiur78h.png";
+hampLeft2.src   = "https://i.imgur.com/RIR3EBU.png";
+hampRight1.src  = "https://i.imgur.com/74yDjMt.png";
+hampRight2.src  = "https://i.imgur.com/ekzDUeJ.png";
+
+
+
+//----------------------------------------------------------------//
 
 var importedCanvasX = 650;
 var importedCanvasY = 800;
@@ -30,13 +42,12 @@ class Game extends Component {
 
   state = {
     canvasX: importedCanvasX,
-    canvasY: 800,
+    canvasY: importedCanvasY,
     defaultX: 325,
     defaultY: 50,
     gravity: 0.5,
     charScale: 200,
     fallingObjNum: 10,
-
     //At some point the x values will have to be set to some proportionality of the window size
     //that might have to be different for different devices
 
@@ -54,6 +65,8 @@ class Game extends Component {
       y: 10000,
       radius: 20,
       velocity: 0,
+      currentDirection: hampImage,
+      stillMoving: false,
     },
   };
 
@@ -61,7 +74,7 @@ class Game extends Component {
     return Math.random() * this.state.canvasX;
   };
 
-  draw = () => {
+  draw = (sprite) => {
     //not sure what is meant by refs being deprecated
     //but the code breaks without refs
     const ctx = this.refs.canvas.getContext("2d");
@@ -81,7 +94,7 @@ class Game extends Component {
 
     //drawing hamperman image
     ctx.drawImage(
-      hampImage,
+      sprite,
       0,
       0,
       640,
@@ -93,12 +106,15 @@ class Game extends Component {
       this.state.charScale,
       this.state.charScale
     );
+
+    
+
+
   };
 
   //update is called every frame
   update = () => {
     //for loop to iterate through falling object array and set new velocities
-
     for (var i = 0; i < objArr.length; i++) {
       var newVal = (objArr[i].velocity + this.state.gravity) * 0.9;
       objArr[i].setVelocity(newVal);
@@ -123,11 +139,12 @@ class Game extends Component {
     }
   };
 
+  
   listen = () => {
     //keycode for left arrow
     document.addEventListener("keydown", (e) =>
       e.keyCode === 37
-        ? this.setState({
+      ? this.setState({
             character: {
               //y is constant
               y: this.state.canvasY - this.state.charScale,
@@ -135,10 +152,11 @@ class Game extends Component {
               //dont let it go all the way to the max
               x: Math.max(this.state.character.x - 8, 0),
               radius: 20,
+              currentDirection: hampLeft1,
             },
           })
         : null
-    );
+        );
     //keycode for right arrow
     document.addEventListener("keydown", (e) =>
       e.keyCode === 39
@@ -152,10 +170,54 @@ class Game extends Component {
                 this.state.canvasX - this.state.charScale
               ),
               radius: 20,
+              currentDirection: hampRight1,
+              stillMoving: true,
             },
           })
         : null
     );
+
+    document.addEventListener("keyup", (e) =>
+    e.keyCode === 39
+      ? this.setState({
+          character: {
+            //y is constant
+            y: this.state.canvasY - this.state.charScale,
+            //don't let it go all the way out of the canvas
+            x: Math.min(
+              this.state.character.x + 8,
+              this.state.canvasX - this.state.charScale
+            ),
+            radius: 20,
+            currentDirection: hampImage,
+            stillMoving: true,
+          },
+        })
+      : null
+    );
+
+    
+    document.addEventListener("keyup", (e) =>
+    e.keyCode === 37
+      ? this.setState({
+          character: {
+            //y is constant
+            y: this.state.canvasY - this.state.charScale,
+            //don't let it go all the way out of the canvas
+            x: Math.min(
+              this.state.character.x + 8,
+              this.state.canvasX - this.state.charScale
+            ),
+            radius: 20,
+            currentDirection: hampImage,
+            stillMoving: true,
+          },
+        })
+      : null
+    );
+
+
+   
   };
 
   //Not exactly sure why componentDidMount was used
@@ -164,7 +226,7 @@ class Game extends Component {
   componentDidMount() {
     setInterval(() => {
       this.update();
-      this.draw();
+      this.draw(this.state.character.currentDirection);
       //personally added to test event listener functionality
     }, 1000 / 60); //1000 milliseconds divided by 60 seconds = 60fps
 

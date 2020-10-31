@@ -4,7 +4,7 @@ export class fallingObject{
     newVelocity = 0;
     defaultY;
 
-    constructor(xs, ys, radiuss, velocitys, canvasXi, canvasYi )
+    constructor(xs, ys, radiuss, velocitys, canvasXi, canvasYi, currentDirections )
     {
         this.x = xs;
         this.y = ys;
@@ -12,7 +12,8 @@ export class fallingObject{
         this.velocity= velocitys;
         this.defaultY = 50;
         this.canvasX = canvasXi;
-        this.canvasY = canvasYi
+        this.canvasY = canvasYi;
+        this.currentDirection = currentDirections
     }
     x()
     {
@@ -51,7 +52,15 @@ export class fallingObject{
         
         this.x = (Math.floor(Math.random() * this.canvasX) + 1)
     }
-
+    
+    currentDirection()
+    {
+        return this.currentDirection
+    }
+    setCurrentDirection(sprite)
+    {
+        this.currentDirection = sprite
+    }
 }
 
 export default fallingObject

@@ -125,11 +125,22 @@ class Game extends Component {
         0
       );
       objArr[i].setY(y);
+
+      // Check for collisions
+      if(objArr[i].y >= this.state.character.y + 15) {
+        // Check for collisions with the player
+        if(this.state.character.radius * 2 >= Math.abs(objArr[i].x - (this.state.character.x + this.state.character.radius * 2 * (this.state.charScale / 100)))) {
+            objArr[i].onCollide(); // Trigger the onCollide function
+
+            // Reset the object
+            objArr[i].setRandomX();
+            objArr[i].setY(objArr[i].defaultY);
+            continue;
+        }
+      }
+
       //check if object has fallen to level of character
       if (objArr[i].y >= this.state.canvasY - this.state.character.radius) {
-        // Check for collisions with the player
-        if(this.state.character.radius >= Math.abs(objArr[i].x - (this.state.character.x + this.state.character.radius * 2.5)))
-                    console.log("collision");
         objArr[i].setRandomX();
         //to be updated for random Y values
         objArr[i].setY(objArr[i].defaultY);

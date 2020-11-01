@@ -205,7 +205,7 @@ class Game extends Component {
             y: this.state.canvasY - this.state.charScale,
             //don't let it go all the way out of the canvas
             x: Math.min(
-              this.state.character.x + 8,
+              this.state.character.x - 8,
               this.state.canvasX - this.state.charScale
             ),
             radius: 20,

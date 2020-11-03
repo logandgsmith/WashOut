@@ -79,6 +79,7 @@ class Game extends Component {
     //but the code breaks without refs
     const ctx = this.refs.canvas.getContext("2d");
     //background color to clear canvas every frame
+    ctx.strokeStyle = "rgb(0, 0, 0)";
     ctx.fillStyle = "#F9F9F9";
 
     ctx.fillRect(0, 0, this.refs.canvas.width, this.refs.canvas.height);

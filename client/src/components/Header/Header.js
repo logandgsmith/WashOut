@@ -1,31 +1,26 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './Header.css';
+import React from "react";
+import "./Header.css";
+import { Nav, Navbar, Form, FormControl, Button } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Header = () => {
-    return (
-        <div className='topnav'>
-            {/* Logo */}
-            <Link id="logo-link" to="/">
-                <img className="topnav-logo" src={ "/logo192.png" } alt="React logo" />
-            </Link>
+  return (
+    <div className="topnav">
+      {/* Logo */}
+      <img src="https://i.imgur.com/nhjOSV3.png"></img>
+      <p id="title">WashOut!</p>
+      <h3>You found a secret page!</h3>
+      <p id="something">Sorry we couldn't find the page you were looking for, but please enjoy this special game instead</p>
 
-            {/* Page Links */}
-            <div className="topnav-right">
-                <Link className="topnav-link" to='/Register'>Sign in</Link>
-                <Link className="topnav-link" to='/projects'>Projects</Link>
-                <a className="topnav-link" target='_blank' rel="noopener noreferrer" href="https://www.facebook.com/groups/ufosc/events/?source=4&action_history=null&filter=calendar">
-                    Events
-                    <i className="fas fa-external-link-alt external-link" data-fa-transform="up-6"></i>
-                </a>
-                <a className="topnav-link" target='_blank' rel="noopener noreferrer" href="https://github.com/ufosc/club-resources">
-                    Resources
-                    <i className="fas fa-external-link-alt external-link" data-fa-transform="up-6 right-4"></i>
-                </a>
-                <Link className="topnav-link" to="/about">About</Link>
-            </div>
-        </div>
-    )
-}
+      {/* Page Links */}
+        <Navbar className="nav-style" variant="light">
+            <Button variant="light" size="lg">PLAY</Button>
+            <Nav className="mr-auto">
+            </Nav>
+            <p inline className="head3">Current Score: <span className="currScore"> 000 </span> High Score: <span className="hiScore"> 000</span></p>
+        </Navbar>
+    </div>
+  );
+};
 
 export default Header;

@@ -1,10 +1,39 @@
-.topnav-link{
-    color: green;
+.topnav{
+    background: #01C9E1;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #01C9E1, #c0c0aa);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to top, #01C9E1, #c0c0aa); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    margin-bottom: 50px;
+    box-shadow: 3px 2px 20px #676767;
+    font-family: 'Roboto', sans-serif;
 }
 
-.topnav{
-    background-color: #01C9E1;
-    margin-bottom: 50px;
+#title{
+    font-size: 70px;
     text-align: center;
-    box-shadow: 3px 2px 20px #676767;
+    font-family: 'Sail', cursive;
+    color: #F9F9F9;
+}
+
+img{
+    height: 100px;
+    padding: 1%;
+}
+
+#something{
+    text-align: center;
+    color: #FFB600;
+}
+
+.nav-style{
+    color: #FF5A39;
+    background-color: #F9F9F9;
+    border-top: 5px solid #676767;
+    font-family: 'Roboto', sans-serif;
+
+}
+
+#head3{
+    margin: 0;
+    padding: 0;
+    font-size: 30px;
 }

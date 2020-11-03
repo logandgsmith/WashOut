@@ -52,6 +52,12 @@ export class fallingObject{
         
         this.x = (Math.floor(Math.random() * this.canvasX) + 1)
     }
+
+    // We can subclass from this class for obstacles and collectibles and override this function 
+    onCollide()
+    {
+        console.log("Collision")
+    }
     
     currentDirection()
     {

@@ -118,7 +118,13 @@ class Game extends Component {
 
 
   };
-
+    // Drawing score at top left of canvas
+  drawScore = () =>{
+        var ctx = this.refs.canvas.getContext("2d")
+        ctx.font = "16px Arial"
+        ctx.fillStyle = "#FFFFFF"
+        ctx.fillText("Score: " + score, 50, 50);
+   }
   //update is called every frame
   update = () => {
     //for loop to iterate through falling object array and set new velocities

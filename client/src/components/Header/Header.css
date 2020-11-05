@@ -4,31 +4,34 @@
     background: linear-gradient(to top, #01C9E1, #c0c0aa); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     margin-bottom: 50px;
     box-shadow: 3px 2px 20px #676767;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 #title{
-    font-size: 70px;
+    font-size: 90px;
     text-align: center;
     font-family: 'Sail', cursive;
     color: #F9F9F9;
+    text-shadow: 3px 3px 10px black,
+                 3px 3px 10px #01C9E1,
+                 1px 3px 10px whitesmoke;
 }
 
 img{
-    height: 100px;
-    padding: 1%;
+    height: 50px;
+    padding-left: 1%;
 }
 
 #something{
     text-align: center;
-    color: #FFB600;
+    color: #F9F9F9;
+    font-style: italic;
 }
 
 .nav-style{
     color: #FF5A39;
     background-color: #F9F9F9;
     border-top: 5px solid #676767;
-    font-family: 'Roboto', sans-serif;
 
 }
 
@@ -36,4 +39,12 @@ img{
     margin: 0;
     padding: 0;
     font-size: 30px;
+    position: relative;
+    vertical-align: center;
 }
+ #secret{
+     text-align: center;
+     font-size: 30px;
+     font-weight: 300;
+     color: white;
+ }

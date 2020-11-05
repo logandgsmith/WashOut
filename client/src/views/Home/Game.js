@@ -10,13 +10,38 @@ var hampLeft1   = new Image();
 var hampLeft2   = new Image();
 var hampRight1  = new Image();
 var hampRight2  = new Image();
+
 hampImage.src   = "https://i.imgur.com/EKlTCEr.png";
 hampLeft1.src   = "https://i.imgur.com/hiur78h.png";
 hampLeft2.src   = "https://i.imgur.com/RIR3EBU.png";
 hampRight1.src  = "https://i.imgur.com/74yDjMt.png";
 hampRight2.src  = "https://i.imgur.com/ekzDUeJ.png";
 
+//---------------SPRITES FOR FALLING OBJECTS-----------------------// 
 
+var obstacle1 = new Image();
+var obstacle2 = new Image();
+var obstacle3 = new Image();
+var obstacle4 = new Image();
+var obstacle5 = new Image();
+
+obstacle1.src = "https://i.imgur.com/H5upRrj.png";
+obstacle2.src = "https://i.imgur.com/DR8Lrt9.png";
+obstacle3.src = "https://i.imgur.com/1nrBB8v.png";
+obstacle4.src = "https://i.imgur.com/htEvYeG.png";
+obstacle5.src = "https://i.imgur.com/ShmivUw.png";
+
+var collectible1 = new Image();
+var collectible2 = new Image();
+var collectible3 = new Image();
+var collectible4 = new Image();
+var collectible5 = new Image();
+
+collectible1.src = "https://i.imgur.com/TIhKbTM.png";
+collectible2.src = "https://i.imgur.com/hRORvbR.png";
+collectible3.src = "https://i.imgur.com/xJLNr2B.png";
+collectible4.src = "https://i.imgur.com/d3BBLdz.png";
+collectible5.src = "https://i.imgur.com/pum5vSq.png";
 
 //----------------------------------------------------------------//
 
@@ -33,7 +58,8 @@ for (var i = 0; i < numObj; i++) {
     20,
     0,
     650,
-    800
+    800,
+    false,
   );
 }
 
@@ -85,12 +111,21 @@ class Game extends Component {
     //ball color
     //loop for falling objects
     for (var i = 0; i < objArr.length; i++) {
-      ctx.fillStyle = "green";
-      ctx.beginPath();
-      //creates outline arc for falling obj
-      ctx.arc(objArr[i].x + i, objArr[i].y, objArr[i].radius, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.stroke();
+      if(objArr[i].isObstacle() === false){
+        ctx.fillStyle = "green";
+        ctx.beginPath();
+        //creates outline arc for falling obj
+        ctx.arc(objArr[i].x + i, objArr[i].y, objArr[i].radius, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+      }else{
+        ctx.fillStyle = "red";
+        ctx.beginPath();
+        //creates outline arc for falling obj
+        ctx.arc(objArr[i].x + i, objArr[i].y, objArr[i].radius, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+      }
     }
 
     //drawing hamperman image
@@ -145,6 +180,15 @@ class Game extends Component {
         objArr[i].setRandomX();
         //to be updated for random Y values
         objArr[i].setY(objArr[i].defaultY);
+
+        // Determine if obstacle or collectible
+        var generator = Math.random() * 100;
+        var obst = false;
+        if(generator > 49){
+          obst = true;
+        }
+        objArr[i].setObstacle(obst);
+
         continue;
       }
     }

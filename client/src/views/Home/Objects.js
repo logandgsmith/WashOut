@@ -4,7 +4,7 @@ export class fallingObject{
     newVelocity = 0;
     defaultY;
 
-    constructor(xs, ys, radiuss, velocitys, canvasXi, canvasYi, currentDirections )
+    constructor(xs, ys, radiuss, velocitys, canvasXi, canvasYi, obstacle , currentDirections)
     {
         this.x = xs;
         this.y = ys;
@@ -13,7 +13,8 @@ export class fallingObject{
         this.defaultY = 50;
         this.canvasX = canvasXi;
         this.canvasY = canvasYi;
-        this.currentDirection = currentDirections
+        this.currentDirection = currentDirections;
+        this.obstacle = obstacle;
     }
     x()
     {
@@ -66,6 +67,12 @@ export class fallingObject{
     setCurrentDirection(sprite)
     {
         this.currentDirection = sprite
+    }
+    isObstacle(){
+        return this.obstacle;
+    }
+    setObstacle(i){
+        this.obstacle = i;
     }
 }
 

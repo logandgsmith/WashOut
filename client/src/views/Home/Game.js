@@ -168,48 +168,12 @@ class Game extends Component {
       }else if (generator >= 1 && generator <= 10){
         falling.setObstacle(true);
         var rand = getRandomInt(1,5);
-        switch(rand){
-          case 1:
-            falling.currentDirection = obstacle1;
-            break;
-          case 2:
-            falling.currentDirection = obstacle2;
-            break;
-          case 3:
-            falling.currentDirection = obstacle3;
-            break;
-          case 4:
-            falling.currentDirection = obstacle4;
-            break;
-          case 5:
-            falling.currentDirection = obstacle5;
-            break;
-          default:
-              break;
-        }
+        falling.currentDirection = obstacles[rand - 1];
       }else{
         falling.setObstacle(false);
         falling.setPowerUp(false);
         var rand = getRandomInt(1,5);
-        switch(rand){
-          case 1:
-            falling.currentDirection = collectible1;
-            break;
-          case 2:
-            falling.currentDirection = collectible2;
-            break;
-          case 3:
-            falling.currentDirection = collectible3;
-            break;
-          case 4:
-            falling.currentDirection = collectible4;
-            break;
-          case 5:
-            falling.currentDirection = collectible5;
-            break;
-          default:
-              break;
-        }
+        falling.currentDirection = collectibles[rand - 1];
       }
     }
 

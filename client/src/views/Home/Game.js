@@ -129,12 +129,6 @@ class Game extends Component {
     //ball color
     //loop for falling objects
     for (var i = 0; i < objArr.length; i++) {
-      ctx.fillStyle = "green";
-      ctx.beginPath();
-      //creates outline arc for falling obj
-      ctx.arc(objArr[i].x + i, objArr[i].y, objArr[i].radius, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.stroke();
       ctx.drawImage(
         objArr[i].currentDirection,
         0,

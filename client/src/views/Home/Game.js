@@ -31,6 +31,8 @@ obstacle3.src = "https://i.imgur.com/1nrBB8v.png";
 obstacle4.src = "https://i.imgur.com/htEvYeG.png";
 obstacle5.src = "https://i.imgur.com/ShmivUw.png";
 
+var obstacles = [obstacle1, obstacle2, obstacle3, obstacle4, obstacle5]
+
 var collectible1 = new Image();
 var collectible2 = new Image();
 var collectible3 = new Image();
@@ -43,6 +45,12 @@ collectible3.src = "https://i.imgur.com/xJLNr2B.png";
 collectible4.src = "https://i.imgur.com/d3BBLdz.png";
 collectible5.src = "https://i.imgur.com/pum5vSq.png";
 
+var collectibles = [collectible1, collectible2, collectible3, collectible4, collectible5];
+
+var powerUp1 = new Image();
+
+powerUp1.src = "https://i.imgur.com/S4848AL.png";
+
 //----------------------------------------------------------------//
 
 var importedCanvasX = 650;
@@ -51,16 +59,26 @@ var numObj = 5;
 
 var objArr = [];
 
+// Generates a random integer (min, max inclusive)
+function getRandomInt(min, max){
+  var minimum = Math.ceil(min);
+  var maximum = Math.floor(max);
+  return Math.floor(Math.random() * (maximum - minimum + 1) + minimum);
+}
+
+
 for (var i = 0; i < numObj; i++) {
-  objArr[i] = new fallingObject(
-    Math.random() * importedCanvasX,
-    50,
-    20,
-    0,
-    650,
-    800,
-    false,
-  );
+    objArr[i] = new fallingObject(
+      Math.random() * importedCanvasX,
+      50,
+      20,
+      0,
+      650,
+      800,
+      false,
+      false,
+      collectibles[i]
+    );
 }
 
 class Game extends Component {
@@ -111,21 +129,13 @@ class Game extends Component {
     //ball color
     //loop for falling objects
     for (var i = 0; i < objArr.length; i++) {
-      if(objArr[i].isObstacle() === false){
-        ctx.fillStyle = "green";
-        ctx.beginPath();
-        //creates outline arc for falling obj
-        ctx.arc(objArr[i].x + i, objArr[i].y, objArr[i].radius, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.stroke();
-      }else{
-        ctx.fillStyle = "red";
-        ctx.beginPath();
-        //creates outline arc for falling obj
-        ctx.arc(objArr[i].x + i, objArr[i].y, objArr[i].radius, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.stroke();
-      }
+      ctx.drawImage(
+        objArr[i].currentDirection,
+        objArr[i].x,
+        objArr[i].y,
+        120,
+        120
+      );
     }
 
     //drawing hamperman image
@@ -147,6 +157,62 @@ class Game extends Component {
 
   //update is called every frame
   update = () => {
+
+    // Generates and updates Collectible/Obstacle/PowerUp status and sprite
+
+    function updateFallingobject(falling){
+      var generator = getRandomInt(0, 20);
+      if(generator === 0 ){
+        falling.setPowerUp(true);
+        falling.currentDirection = powerUp1;
+      }else if (generator >= 1 && generator <= 10){
+        falling.setObstacle(true);
+        var rand = getRandomInt(1,5);
+        switch(rand){
+          case 1:
+            falling.currentDirection = obstacle1;
+            break;
+          case 2:
+            falling.currentDirection = obstacle2;
+            break;
+          case 3:
+            falling.currentDirection = obstacle3;
+            break;
+          case 4:
+            falling.currentDirection = obstacle4;
+            break;
+          case 5:
+            falling.currentDirection = obstacle5;
+            break;
+          default:
+              break;
+        }
+      }else{
+        falling.setObstacle(false);
+        falling.setPowerUp(false);
+        var rand = getRandomInt(1,5);
+        switch(rand){
+          case 1:
+            falling.currentDirection = collectible1;
+            break;
+          case 2:
+            falling.currentDirection = collectible2;
+            break;
+          case 3:
+            falling.currentDirection = collectible3;
+            break;
+          case 4:
+            falling.currentDirection = collectible4;
+            break;
+          case 5:
+            falling.currentDirection = collectible5;
+            break;
+          default:
+              break;
+        }
+      }
+    }
+
     //for loop to iterate through falling object array and set new velocities
     for (var i = 0; i < objArr.length; i++) {
       var newVal = (objArr[i].velocity + this.state.gravity) * 0.9;
@@ -171,6 +237,10 @@ class Game extends Component {
             // Reset the object
             objArr[i].setRandomX();
             objArr[i].setY(objArr[i].defaultY);
+
+            // Updates status and sprite of falling object
+            updateFallingobject(objArr[i]);
+
             continue;
         }
       }
@@ -181,13 +251,8 @@ class Game extends Component {
         //to be updated for random Y values
         objArr[i].setY(objArr[i].defaultY);
 
-        // Determine if obstacle or collectible
-        var generator = Math.random() * 100;
-        var obst = false;
-        if(generator > 49){
-          obst = true;
-        }
-        objArr[i].setObstacle(obst);
+        // Updates status and sprite of falling object
+        updateFallingobject(objArr[i]);
 
         continue;
       }

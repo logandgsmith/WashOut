@@ -51,10 +51,6 @@ class Game extends Component {
     //At some point the x values will have to be set to some proportionality of the window size
     //that might have to be different for different devices
 
-    //IDEA: create 10 falling objects and have positions automatically to a random X Value and a set Y Value
-    //That we always can have 10 objects falling at once(with an offset)
-    //this would be implemented with some array of fallingObjs
-    //Or name fallingObj0,FallingObj1 etc. and have for loops that go through and update the positions of each obj
 
     character: {
       //just setting attribuites for ctx.arc to draw a circle
@@ -157,11 +153,14 @@ class Game extends Component {
       e.keyCode === 37
       ? this.setState({
             character: {
-              //y is constant
-              y: this.state.canvasY - this.state.charScale,
+              //y is constante
+              y: this.state.canvasY - (this.state.charScale),
               //x is variable and is moved by integer value
               //dont let it go all the way to the max
-              x: Math.max(this.state.character.x - 8, 0),
+              x: Math.max(
+                this.state.character.x - 8,
+                - (this.state.charScale/2)
+              ),
               radius: 20,
               currentDirection: hampLeft1,
             },
@@ -174,11 +173,11 @@ class Game extends Component {
         ? this.setState({
             character: {
               //y is constant
-              y: this.state.canvasY - this.state.charScale,
+              y: this.state.canvasY - (this.state.charScale),
               //don't let it go all the way out of the canvas
               x: Math.min(
                 this.state.character.x + 8,
-                this.state.canvasX - this.state.charScale
+                this.state.canvasX - (this.state.charScale/2)
               ),
               radius: 20,
               currentDirection: hampRight1,
@@ -193,11 +192,11 @@ class Game extends Component {
       ? this.setState({
           character: {
             //y is constant
-            y: this.state.canvasY - this.state.charScale,
+            y: this.state.canvasY - (this.state.charScale),
             //don't let it go all the way out of the canvas
             x: Math.min(
               this.state.character.x + 8,
-              this.state.canvasX - this.state.charScale
+              this.state.canvasX - (this.state.charScale/2)
             ),
             radius: 20,
             currentDirection: hampImage,
@@ -207,7 +206,7 @@ class Game extends Component {
       : null
     );
 
-    
+       //keycode for left arrow 
     document.addEventListener("keyup", (e) =>
     e.keyCode === 37
       ? this.setState({
@@ -215,9 +214,9 @@ class Game extends Component {
             //y is constant
             y: this.state.canvasY - this.state.charScale,
             //don't let it go all the way out of the canvas
-            x: Math.min(
-              this.state.character.x - 8,
-              this.state.canvasX - this.state.charScale
+            x: Math.max(
+                this.state.character.x - 8,
+                - (this.state.charScale/2)
             ),
             radius: 20,
             currentDirection: hampImage,
@@ -231,14 +230,14 @@ class Game extends Component {
    
   };
 
-  //Not exactly sure why componentDidMount was used
+
   //This is what requires component to be defined
   //render() also must be defined with this
   componentDidMount() {
     setInterval(() => {
       this.update();
       this.draw(this.state.character.currentDirection);
-      //personally added to test event listener functionality
+
     }, 1000 / 60); //1000 milliseconds divided by 60 seconds = 60fps
 
     this.listen();

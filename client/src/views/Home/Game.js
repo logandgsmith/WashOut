@@ -10,13 +10,46 @@ var hampLeft1   = new Image();
 var hampLeft2   = new Image();
 var hampRight1  = new Image();
 var hampRight2  = new Image();
+
 hampImage.src   = "https://i.imgur.com/EKlTCEr.png";
 hampLeft1.src   = "https://i.imgur.com/hiur78h.png";
 hampLeft2.src   = "https://i.imgur.com/RIR3EBU.png";
 hampRight1.src  = "https://i.imgur.com/74yDjMt.png";
 hampRight2.src  = "https://i.imgur.com/ekzDUeJ.png";
 
+//---------------SPRITES FOR FALLING OBJECTS-----------------------// 
 
+var obstacle1 = new Image();
+var obstacle2 = new Image();
+var obstacle3 = new Image();
+var obstacle4 = new Image();
+var obstacle5 = new Image();
+
+obstacle1.src = "https://i.imgur.com/H5upRrj.png";
+obstacle2.src = "https://i.imgur.com/DR8Lrt9.png";
+obstacle3.src = "https://i.imgur.com/1nrBB8v.png";
+obstacle4.src = "https://i.imgur.com/htEvYeG.png";
+obstacle5.src = "https://i.imgur.com/ShmivUw.png";
+
+var obstacles = [obstacle1, obstacle2, obstacle3, obstacle4, obstacle5]
+
+var collectible1 = new Image();
+var collectible2 = new Image();
+var collectible3 = new Image();
+var collectible4 = new Image();
+var collectible5 = new Image();
+
+collectible1.src = "https://i.imgur.com/TIhKbTM.png";
+collectible2.src = "https://i.imgur.com/hRORvbR.png";
+collectible3.src = "https://i.imgur.com/xJLNr2B.png";
+collectible4.src = "https://i.imgur.com/d3BBLdz.png";
+collectible5.src = "https://i.imgur.com/pum5vSq.png";
+
+var collectibles = [collectible1, collectible2, collectible3, collectible4, collectible5];
+
+var powerUp1 = new Image();
+
+powerUp1.src = "https://i.imgur.com/S4848AL.png";
 
 //----------------------------------------------------------------//
 
@@ -26,15 +59,26 @@ var numObj = 5;
 
 var objArr = [];
 
+// Generates a random integer (min, max inclusive)
+function getRandomInt(min, max){
+  var minimum = Math.ceil(min);
+  var maximum = Math.floor(max);
+  return Math.floor(Math.random() * (maximum - minimum + 1) + minimum);
+}
+
+
 for (var i = 0; i < numObj; i++) {
-  objArr[i] = new fallingObject(
-    Math.random() * importedCanvasX,
-    50,
-    20,
-    0,
-    650,
-    800
-  );
+    objArr[i] = new fallingObject(
+      Math.random() * importedCanvasX,
+      50,
+      20,
+      0,
+      650,
+      800,
+      false,
+      false,
+      collectibles[i]
+    );
 }
 
 class Game extends Component {
@@ -85,12 +129,17 @@ class Game extends Component {
     //ball color
     //loop for falling objects
     for (var i = 0; i < objArr.length; i++) {
-      ctx.fillStyle = "green";
-      ctx.beginPath();
-      //creates outline arc for falling obj
-      ctx.arc(objArr[i].x + i, objArr[i].y, objArr[i].radius, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.stroke();
+      ctx.drawImage(
+        objArr[i].currentDirection,
+        0,
+        0,
+        640,
+        640,
+        (objArr[i].x - 60),
+        (objArr[i].y - 50),
+        120,
+        120
+      );
     }
 
     //drawing hamperman image
@@ -112,6 +161,26 @@ class Game extends Component {
 
   //update is called every frame
   update = () => {
+
+    // Generates and updates Collectible/Obstacle/PowerUp status and sprite
+
+    function updateFallingobject(falling){
+      var generator = getRandomInt(0, 20);
+      if(generator === 0 ){
+        falling.setPowerUp(true);
+        falling.currentDirection = powerUp1;
+      }else if (generator >= 1 && generator <= 10){
+        falling.setObstacle(true);
+        var rand = getRandomInt(1,5);
+        falling.currentDirection = obstacles[rand - 1];
+      }else{
+        falling.setObstacle(false);
+        falling.setPowerUp(false);
+        var rand = getRandomInt(1,5);
+        falling.currentDirection = collectibles[rand - 1];
+      }
+    }
+
     //for loop to iterate through falling object array and set new velocities
     for (var i = 0; i < objArr.length; i++) {
       var newVal = (objArr[i].velocity + this.state.gravity) * 0.9;
@@ -136,6 +205,10 @@ class Game extends Component {
             // Reset the object
             objArr[i].setRandomX();
             objArr[i].setY(objArr[i].defaultY);
+
+            // Updates status and sprite of falling object
+            updateFallingobject(objArr[i]);
+
             continue;
         }
       }
@@ -145,6 +218,10 @@ class Game extends Component {
         objArr[i].setRandomX();
         //to be updated for random Y values
         objArr[i].setY(objArr[i].defaultY);
+
+        // Updates status and sprite of falling object
+        updateFallingobject(objArr[i]);
+
         continue;
       }
     }

@@ -62,7 +62,6 @@ var timer= 150;
 var health=3;
 var hlthArr=[];
 
-localStorage.setItem("vLoc",score);
 // Generates a random integer (min, max inclusive)
 function getRandomInt(min, max){
   var minimum = Math.ceil(min);
@@ -70,7 +69,7 @@ function getRandomInt(min, max){
   return Math.floor(Math.random() * (maximum - minimum + 1) + minimum);
 }
 
-function addScore(num){
+function increaseScore(num){
   score+=num;
 
 }
@@ -86,7 +85,7 @@ function decreaseHealth(){
 }
 for (var i =0;i<health;i++){
   hlthArr[i] = new fallingObject(
-    i*50+50,
+    i*50+150,
     50,
     5,
     0,
@@ -148,7 +147,12 @@ class Game extends Component {
   randX = () => {
     return Math.random() * this.state.canvasX;
   };
-
+  drawl = () =>{
+        var ctx = this.refs.canvas.getContext("2d")
+        ctx.font = "16px Arial"
+        ctx.fillStyle = "#FF0000"
+        ctx.fillText("Lives: " , 50, 50);
+  }
   draw = (sprite) => {
     //not sure what is meant by refs being deprecated
     //but the code breaks without refs
@@ -206,6 +210,7 @@ class Game extends Component {
 
   //update is called every frame
   update = () => {
+    localStorage.setItem("vLoc",score);
 
     // Generates and updates Collectible/Obstacle/PowerUp status and sprite
 
@@ -254,6 +259,7 @@ class Game extends Component {
             // Updates status and sprite of falling object
             updateFallingobject(objArr[i]);
             decreaseHealth();
+            increaseScore(2);
             continue;
         }
       }
@@ -360,10 +366,11 @@ class Game extends Component {
     setInterval(() => {
       this.update();
       this.draw(this.state.character.currentDirection);
+      this.drawl();
       //personally added to test event listener functionality
     }, 1000 / 60); //1000 milliseconds divided by 60 seconds = 60fps
     setInterval(() => {
-      addScore(1);
+      increaseScore(1);
       timer-=1;
     },1000)
     this.listen();

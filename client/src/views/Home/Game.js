@@ -217,10 +217,12 @@ class Game extends Component {
     function updateFallingobject(falling){
       var generator = getRandomInt(0, 20);
       if(generator === 0 ){
+        falling.setObstacle(false);
         falling.setPowerUp(true);
         falling.currentDirection = powerUp1;
       }else if (generator >= 1 && generator <= 10){
         falling.setObstacle(true);
+        falling.setPowerUp(false);
         var rand = getRandomInt(1,5);
         falling.currentDirection = obstacles[rand - 1];
       }else{
@@ -252,14 +254,19 @@ class Game extends Component {
         if(this.state.character.radius * 2 >= Math.abs(objArr[i].x - (this.state.character.x + this.state.character.radius * 2 * (this.state.charScale / 100)))) {
             objArr[i].onCollide(); // Trigger the onCollide function
 
+            // Check if this item is harmful
+            if(objArr[i].isObstacle())
+              decreaseHealth();
+            else 
+              increaseScore(2);
+
             // Reset the object
             objArr[i].setRandomX();
             objArr[i].setY(objArr[i].defaultY);
 
             // Updates status and sprite of falling object
             updateFallingobject(objArr[i]);
-            decreaseHealth();
-            increaseScore(2);
+
             continue;
         }
       }

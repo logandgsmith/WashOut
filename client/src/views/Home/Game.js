@@ -68,10 +68,11 @@ function getRandomInt(min, max){
   var maximum = Math.floor(max);
   return Math.floor(Math.random() * (maximum - minimum + 1) + minimum);
 }
-
+function decreaseScore(num){
+  score-=num
+}
 function increaseScore(num){
   score+=num;
-
 }
 function decreaseHealth(){
   if(health > 0){
@@ -255,10 +256,12 @@ class Game extends Component {
             objArr[i].onCollide(); // Trigger the onCollide function
 
             // Check if this item is harmful
-            if(objArr[i].isObstacle())
+            if(objArr[i].isObstacle()){
               decreaseHealth();
+              decreaseScore(10);
+            }
             else 
-              increaseScore(2);
+              increaseScore(10);
 
             // Reset the object
             objArr[i].setRandomX();

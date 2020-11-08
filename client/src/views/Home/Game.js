@@ -56,8 +56,11 @@ powerUp1.src = "https://i.imgur.com/S4848AL.png";
 var importedCanvasX = 650;
 var importedCanvasY = 800;
 var numObj = 5;
-
+var score= 0;
 var objArr = [];
+var timer= 150;
+var health=3;
+var hlthArr=[];
 
 // Generates a random integer (min, max inclusive)
 function getRandomInt(min, max){
@@ -66,6 +69,33 @@ function getRandomInt(min, max){
   return Math.floor(Math.random() * (maximum - minimum + 1) + minimum);
 }
 
+function increaseScore(num){
+  score+=num;
+
+}
+function decreaseHealth(){
+  if(health > 0){
+    hlthArr.pop();
+    health-=1;
+  } 
+  else{
+    //lose game function
+    //reset game?
+  }
+}
+for (var i =0;i<health;i++){
+  hlthArr[i] = new fallingObject(
+    i*50+150,
+    50,
+    5,
+    0,
+    650,
+    850,
+    false,
+    false,
+    hampImage
+  );
+}
 
 for (var i = 0; i < numObj; i++) {
     objArr[i] = new fallingObject(
@@ -117,7 +147,12 @@ class Game extends Component {
   randX = () => {
     return Math.random() * this.state.canvasX;
   };
-
+  drawl = () =>{
+        var ctx = this.refs.canvas.getContext("2d")
+        ctx.font = "16px Arial"
+        ctx.fillStyle = "#FF0000"
+        ctx.fillText("Lives: " , 50, 50);
+  }
   draw = (sprite) => {
     //not sure what is meant by refs being deprecated
     //but the code breaks without refs
@@ -142,6 +177,20 @@ class Game extends Component {
       );
     }
 
+
+    for (var i = 0; i < hlthArr.length; i++) {
+      ctx.drawImage(
+        hlthArr[i].currentDirection,
+        0,
+        0,
+        640,
+        640,
+        (hlthArr[i].x - 60),
+        (hlthArr[i].y - 50),
+        100,
+        100,
+      );
+    }
     //drawing hamperman image
     ctx.drawImage(
       sprite,
@@ -161,6 +210,7 @@ class Game extends Component {
 
   //update is called every frame
   update = () => {
+    localStorage.setItem("vLoc",score);
 
     // Generates and updates Collectible/Obstacle/PowerUp status and sprite
 
@@ -208,7 +258,8 @@ class Game extends Component {
 
             // Updates status and sprite of falling object
             updateFallingobject(objArr[i]);
-
+            decreaseHealth();
+            increaseScore(2);
             continue;
         }
       }
@@ -315,9 +366,13 @@ class Game extends Component {
     setInterval(() => {
       this.update();
       this.draw(this.state.character.currentDirection);
+      this.drawl();
       //personally added to test event listener functionality
     }, 1000 / 60); //1000 milliseconds divided by 60 seconds = 60fps
-
+    setInterval(() => {
+      increaseScore(1);
+      timer-=1;
+    },1000)
     this.listen();
   }
   render() {

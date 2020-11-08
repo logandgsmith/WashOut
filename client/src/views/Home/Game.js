@@ -10,31 +10,105 @@ var hampLeft1   = new Image();
 var hampLeft2   = new Image();
 var hampRight1  = new Image();
 var hampRight2  = new Image();
+
 hampImage.src   = "https://i.imgur.com/EKlTCEr.png";
 hampLeft1.src   = "https://i.imgur.com/hiur78h.png";
 hampLeft2.src   = "https://i.imgur.com/RIR3EBU.png";
 hampRight1.src  = "https://i.imgur.com/74yDjMt.png";
 hampRight2.src  = "https://i.imgur.com/ekzDUeJ.png";
 
+//---------------SPRITES FOR FALLING OBJECTS-----------------------// 
 
+var obstacle1 = new Image();
+var obstacle2 = new Image();
+var obstacle3 = new Image();
+var obstacle4 = new Image();
+var obstacle5 = new Image();
+
+obstacle1.src = "https://i.imgur.com/H5upRrj.png";
+obstacle2.src = "https://i.imgur.com/DR8Lrt9.png";
+obstacle3.src = "https://i.imgur.com/1nrBB8v.png";
+obstacle4.src = "https://i.imgur.com/htEvYeG.png";
+obstacle5.src = "https://i.imgur.com/ShmivUw.png";
+
+var obstacles = [obstacle1, obstacle2, obstacle3, obstacle4, obstacle5]
+
+var collectible1 = new Image();
+var collectible2 = new Image();
+var collectible3 = new Image();
+var collectible4 = new Image();
+var collectible5 = new Image();
+
+collectible1.src = "https://i.imgur.com/TIhKbTM.png";
+collectible2.src = "https://i.imgur.com/hRORvbR.png";
+collectible3.src = "https://i.imgur.com/xJLNr2B.png";
+collectible4.src = "https://i.imgur.com/d3BBLdz.png";
+collectible5.src = "https://i.imgur.com/pum5vSq.png";
+
+var collectibles = [collectible1, collectible2, collectible3, collectible4, collectible5];
+
+var powerUp1 = new Image();
+
+powerUp1.src = "https://i.imgur.com/S4848AL.png";
 
 //----------------------------------------------------------------//
 
 var importedCanvasX = 650;
 var importedCanvasY = 800;
 var numObj = 5;
-
+var score= 0;
 var objArr = [];
+var timer= 150;
+var health=3;
+var hlthArr=[];
 
-for (var i = 0; i < numObj; i++) {
-  objArr[i] = new fallingObject(
-    Math.random() * importedCanvasX,
+// Generates a random integer (min, max inclusive)
+function getRandomInt(min, max){
+  var minimum = Math.ceil(min);
+  var maximum = Math.floor(max);
+  return Math.floor(Math.random() * (maximum - minimum + 1) + minimum);
+}
+
+function increaseScore(num){
+  score+=num;
+
+}
+function decreaseHealth(){
+  if(health > 0){
+    hlthArr.pop();
+    health-=1;
+  } 
+  else{
+    //lose game function
+    //reset game?
+  }
+}
+for (var i =0;i<health;i++){
+  hlthArr[i] = new fallingObject(
+    i*50+150,
     50,
-    20,
+    5,
     0,
     650,
-    800
+    850,
+    false,
+    false,
+    hampImage
   );
+}
+
+for (var i = 0; i < numObj; i++) {
+    objArr[i] = new fallingObject(
+      Math.random() * importedCanvasX,
+      50,
+      20,
+      0,
+      650,
+      800,
+      false,
+      false,
+      collectibles[i]
+    );
 }
 
 class Game extends Component {
@@ -73,26 +147,50 @@ class Game extends Component {
   randX = () => {
     return Math.random() * this.state.canvasX;
   };
-
+  drawl = () =>{
+        var ctx = this.refs.canvas.getContext("2d")
+        ctx.font = "16px Arial"
+        ctx.fillStyle = "#FF0000"
+        ctx.fillText("Lives: " , 50, 50);
+  }
   draw = (sprite) => {
     //not sure what is meant by refs being deprecated
     //but the code breaks without refs
     const ctx = this.refs.canvas.getContext("2d");
     //background color to clear canvas every frame
-    ctx.fillStyle = "#F9F9F9";
+    ctx.fillStyle = "#EAEAEA";
 
     ctx.fillRect(0, 0, this.refs.canvas.width, this.refs.canvas.height);
     //ball color
     //loop for falling objects
     for (var i = 0; i < objArr.length; i++) {
-      ctx.fillStyle = "green";
-      ctx.beginPath();
-      //creates outline arc for falling obj
-      ctx.arc(objArr[i].x + i, objArr[i].y, objArr[i].radius, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.stroke();
+      ctx.drawImage(
+        objArr[i].currentDirection,
+        0,
+        0,
+        640,
+        640,
+        (objArr[i].x - 60),
+        (objArr[i].y - 50),
+        120,
+        120
+      );
     }
 
+
+    for (var i = 0; i < hlthArr.length; i++) {
+      ctx.drawImage(
+        hlthArr[i].currentDirection,
+        0,
+        0,
+        640,
+        640,
+        (hlthArr[i].x - 60),
+        (hlthArr[i].y - 50),
+        100,
+        100,
+      );
+    }
     //drawing hamperman image
     ctx.drawImage(
       sprite,
@@ -112,6 +210,27 @@ class Game extends Component {
 
   //update is called every frame
   update = () => {
+    localStorage.setItem("vLoc",score);
+
+    // Generates and updates Collectible/Obstacle/PowerUp status and sprite
+
+    function updateFallingobject(falling){
+      var generator = getRandomInt(0, 20);
+      if(generator === 0 ){
+        falling.setPowerUp(true);
+        falling.currentDirection = powerUp1;
+      }else if (generator >= 1 && generator <= 10){
+        falling.setObstacle(true);
+        var rand = getRandomInt(1,5);
+        falling.currentDirection = obstacles[rand - 1];
+      }else{
+        falling.setObstacle(false);
+        falling.setPowerUp(false);
+        var rand = getRandomInt(1,5);
+        falling.currentDirection = collectibles[rand - 1];
+      }
+    }
+
     //for loop to iterate through falling object array and set new velocities
     for (var i = 0; i < objArr.length; i++) {
       var newVal = (objArr[i].velocity + this.state.gravity) * 0.9;
@@ -136,6 +255,11 @@ class Game extends Component {
             // Reset the object
             objArr[i].setRandomX();
             objArr[i].setY(objArr[i].defaultY);
+
+            // Updates status and sprite of falling object
+            updateFallingobject(objArr[i]);
+            decreaseHealth();
+            increaseScore(2);
             continue;
         }
       }
@@ -145,6 +269,10 @@ class Game extends Component {
         objArr[i].setRandomX();
         //to be updated for random Y values
         objArr[i].setY(objArr[i].defaultY);
+
+        // Updates status and sprite of falling object
+        updateFallingobject(objArr[i]);
+
         continue;
       }
     }
@@ -238,9 +366,13 @@ class Game extends Component {
     setInterval(() => {
       this.update();
       this.draw(this.state.character.currentDirection);
+      this.drawl();
       //personally added to test event listener functionality
     }, 1000 / 60); //1000 milliseconds divided by 60 seconds = 60fps
-
+    setInterval(() => {
+      increaseScore(1);
+      timer-=1;
+    },1000)
     this.listen();
   }
   render() {

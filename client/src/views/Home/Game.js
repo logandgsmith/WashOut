@@ -48,7 +48,9 @@ collectible5.src = "https://i.imgur.com/pum5vSq.png";
 var collectibles = [collectible1, collectible2, collectible3, collectible4, collectible5];
 
 var powerUp1 = new Image();
+var powerUp2 = new Image();
 
+powerUp2.src = "https://imgur.com/a/rzZU60g";
 powerUp1.src = "https://i.imgur.com/S4848AL.png";
 
 //----------------------------------------------------------------//

@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import fallingObject from "./Objects.js";
 
 //MUST PRESS RIGHT OR LEFT ARROW TO RENDER HAMPERMAN IN FRAME
-
-
+//background
+var laundrBG = new Image();
+laundrBG.src = "https://i.imgur.com/byOZSGz.png"
 //-------------SPRITES FOR CHARACTER MOVEMENT---------------------// 
 var hampImage   = new Image();
 var hampLeft1   = new Image();
@@ -156,8 +157,7 @@ class Game extends Component {
     const ctx = this.refs.canvas.getContext("2d");
     //background color to clear canvas every frame
     ctx.fillStyle = "#EAEAEA";
-
-    ctx.fillRect(0, 0, this.refs.canvas.width, this.refs.canvas.height);
+    ctx.drawImage(laundrBG, 0, 0, this.refs.canvas.width, this.refs.canvas.height);
     //ball color
     //loop for falling objects
     for (var i = 0; i < objArr.length; i++) {

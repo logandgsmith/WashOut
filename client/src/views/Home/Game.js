@@ -4,7 +4,7 @@ import fallingObject from "./Objects.js";
 //MUST PRESS RIGHT OR LEFT ARROW TO RENDER HAMPERMAN IN FRAME
 //background
 var laundrBG = new Image();
-laundrBG.src = "https://i.imgur.com/byOZSGz.png"
+laundrBG.src = "https://i.imgur.com/o1SC3Vi.png"
 //-------------SPRITES FOR CHARACTER MOVEMENT---------------------// 
 var hampImage   = new Image();
 var hampLeft1   = new Image();
@@ -197,7 +197,7 @@ class Game extends Component {
       640,
       //set x and y coordinates (starts from upper lefthand corner of sprite, hence subtracting the char scale)
       this.state.character.x,
-      this.state.character.y,
+      this.state.character.y+25,
       //sets the size of the image to be drawn
       this.state.charScale,
       this.state.charScale

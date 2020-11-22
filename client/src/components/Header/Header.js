@@ -7,7 +7,7 @@ var score = 0
 class Header extends Component {
   constructor(props){
     super(props);
-    setInterval(() => this.setState({score:this.loadScore()}),1000)
+    setInterval(() => this.setState({score:this.loadScore()}),1000/60)
   }
   loadScore = () => {
     var vloc = localStorage.getItem("vLoc");

@@ -148,7 +148,7 @@ class Game extends Component {
   drawl = () =>{
         var ctx = this.refs.canvas.getContext("2d")
         ctx.font = "16px Arial"
-        ctx.fillStyle = "#FF0000"
+        ctx.fillStyle = "#FA4616"
         ctx.fillText("Lives: " , 50, 50);
   }
   draw = (sprite) => {

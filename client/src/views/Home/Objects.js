@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
 
+
+function getRandomInt(min, max){
+    var minimum = Math.ceil(min);
+    var maximum = Math.floor(max);
+    return Math.floor(Math.random() * (maximum - minimum + 1) + minimum);
+  }
+
 export class fallingObject{
     newVelocity = 0;
     defaultY;
@@ -10,12 +17,13 @@ export class fallingObject{
         this.y = ys;
         this.radius = radiuss;
         this.velocity= velocitys;
-        this.defaultY = 50;
+        this.defaultY = getRandomInt(-200, 0);
         this.canvasX = canvasXi;
         this.canvasY = canvasYi;
         this.obstacle = obstacles;
         this.powerup = powerups;
         this.currentDirection = currentDirections;
+        this.bomb = false;
     }
     x()
     {
@@ -84,6 +92,14 @@ export class fallingObject{
     setPowerUp(i)
     {
         this.powerup = i;
+    }
+    isBomb()
+    {
+        return this.bomb;
+    }
+    setBomb(i)
+    {
+        this.bomb = i;
     }
 }
 

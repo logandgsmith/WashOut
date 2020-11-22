@@ -59,9 +59,12 @@ var importedCanvasY = 800;
 var numObj = 5;
 var score= 0;
 var objArr = [];
-var timer= 150;
+var timer= 180;
 var health=3;
 var hlthArr=[];
+var min = 3;
+var secD = 0;
+var secI = 0; 
 
 // Generates a random integer (min, max inclusive)
 function getRandomInt(min, max){
@@ -74,6 +77,24 @@ function decreaseScore(num){
 }
 function increaseScore(num){
   score+=num;
+}
+function decreaseTimer(){
+  if (min === 0 && secD === 0 && secI === 0){
+
+  }
+  else if(secI===0 && secD === 0){
+    secD = 5;
+    secI = 9;
+    min-=1
+  }
+  else if(secI===0){
+    secD -=1;
+    secI = 9;
+  }
+  else{
+    secI -= 1;
+  }
+
 }
 function decreaseHealth(){
   if(health > 0){
@@ -150,6 +171,10 @@ class Game extends Component {
         ctx.font = "16px Arial"
         ctx.fillStyle = "#FA4616"
         ctx.fillText("Lives: " , 50, 50);
+
+        //Timer
+        ctx.fillText( min + ":" + secD + secI, 550,50);
+
   }
   draw = (sprite) => {
     //not sure what is meant by refs being deprecated
@@ -377,10 +402,14 @@ class Game extends Component {
       this.draw(this.state.character.currentDirection);
       this.drawl();
     }, 1000 / 60); //1000 milliseconds divided by 60 seconds = 60fps
-    setInterval(() => {
+    var inter = setInterval(() => {
       increaseScore(1);
       timer-=1;
+      decreaseTimer();
+      
     },1000)
+    
+    
     this.listen();
   }
   render() {

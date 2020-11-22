@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-var laundrBG = new Image();
-laundrBG.src = "https://i.imgur.com/o1SC3Vi.png"
+
+var bckgr = new Image();
+bckgr.src = "https://i.imgur.com/gypEplv.png?1";
+
 //-------------SPRITES FOR CHARACTER MOVEMENT---------------------// 
 var hampImage   = new Image();
 
@@ -40,13 +42,14 @@ var collectibles = [collectible1, collectible2, collectible3, collectible4, coll
 
 //----------------Powerup/Life-------------------------------------//
 var powerUp1 = new Image();
+var powerUp2 = new Image();
 
-powerUp1.src = "https://i.imgur.com/S4848AL.png";
-
+powerUp1.src = "https://i.imgur.com/BAbtzry.png";
+powerUp2.src = "https://i.imgur.com/gQkMLtB.png"
 
 class Instr extends Component{
     state = {
-        canvasX: 600,
+        canvasX: 650,
         canvasY: 800,
         character: {
             //just setting attribuites for ctx.arc to draw a circle
@@ -61,7 +64,9 @@ class Instr extends Component{
     }
     draw = () => {
         const ctx = this.refs.canvas.getContext("2d");
-       
+        ctx.drawImage(bckgr,50,0,this.refs.canvas.width-75,this.refs.canvas.height)
+    //    ctx.fillStyle="white";
+    //    ctx.fillRect(0,0,this.refs.canvas.width,this.refs.canvas.height)
         
 
         ctx.font = "20px Roboto"
@@ -69,9 +74,11 @@ class Instr extends Component{
         ctx.fillText("INSTRUCTIONS:",250, 50);
         ctx.fillText("Move left and right to catch the collectibles",100,100)
         ctx.fillText("or avoid the obstacles! ",100,125)
+        ctx.fillText("Try to get as many collectibles as you can before ",100,150)
+        ctx.fillText("the time runs out!",100,175)
 
         ctx.font = "16px Roboto"
-        ctx.fillText("Collectibles:                                  Obstacles:",150,175)
+        ctx.fillText("Collectibles:                                  Obstacles:",150,225)
 
          for(var i = 0; i < 5 ;i++){
             
@@ -82,7 +89,7 @@ class Instr extends Component{
                 800,
                 800,
                 250,
-                150 + i*65,
+                200 + i*65,
                 100,
                 100,
                 )
@@ -93,23 +100,37 @@ class Instr extends Component{
                 800,
                 800,
                 450,
-                150 + i*65,
+                200 + i*65,
                 100,
                 100,
                 )
         }
-        ctx.fillText("Power-Up:",150,520)
+        ctx.fillText("Power-Ups:",150,570)
         ctx.drawImage(
             powerUp1,
-            0,
+            50,
             0,
             800,
             800,
             250,
-            505,
+            585,
             100,
             100,
             )
+        ctx.drawImage(
+            powerUp2,
+            50,
+            0,
+            800,
+            800,
+            500,
+            585,
+            100,
+            100,
+            )
+        ctx.fillText("Life-gainer                                   Bomb ",175,625)
+        ctx.fillText("(Clears the laundromat) ",330,645)
+
     }
     componentDidMount() {
        this.draw();

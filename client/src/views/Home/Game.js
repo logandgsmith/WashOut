@@ -86,6 +86,49 @@ function decreaseHealth(){
     //reset game?
   }
 }
+function increaseHealth(){
+  if(health === 2){
+    hlthArr.push(new fallingObject (    
+      2*50+150,
+      50,
+      5,
+      0,
+      650,
+      850,
+      false,
+      false,
+      hampImage))
+    health+=1;
+  }
+  else if(health === 1){
+    hlthArr.push(new fallingObject (    
+      1*50+150,
+      50,
+      5,
+      0,
+      650,
+      850,
+      false,
+      false,
+      hampImage))
+    health+=1;
+  }
+  else if(health === 0){
+
+    hlthArr.push(new fallingObject (    
+      0*50+150,
+      50,
+      5,
+      0,
+      650,
+      850,
+      false,
+      false,
+      hampImage))
+    health+=1;
+  }
+  
+}
 for (var i =0;i<health;i++){
   hlthArr[i] = new fallingObject(
     i*50+150,
@@ -279,6 +322,14 @@ class Game extends Component {
               }
               increaseScore(10);
               continue;
+            }
+            else if (objArr[i].isPowerUp()){
+              increaseScore(10);
+              // Reset the object
+              objArr[i].setRandomX();
+              objArr[i].setY(objArr[i].defaultY);
+              // add life if applicable
+              increaseHealth();
             }
             else{ 
               increaseScore(10);

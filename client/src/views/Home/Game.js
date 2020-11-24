@@ -133,7 +133,7 @@ class Game extends Component {
       x: 50,
       //get the player way down in the screen until a movement key is pressed
       //I couldn't figure out how to get (this.state.canvasY - this.state.character.radius) to work for the y value
-      y: 10000,
+      y: importedCanvasY - 200,
       radius: 20,
       velocity: 0,
       currentDirection: hampImage,

@@ -101,6 +101,7 @@ for (var i =0;i<health;i++){
   );
 }
 
+// Sets the falling objects initial image
 for (var i = 0; i < numObj; i++) {
     objArr[i] = new fallingObject(
       Math.random() * importedCanvasX,
@@ -113,6 +114,15 @@ for (var i = 0; i < numObj; i++) {
       false,
       collectibles[i]
     );
+}
+
+// ========= Mouse Helpers ========== //
+var holding = false;
+function setHolding(){
+  holding = true;
+}
+function unsetHolding(){
+  holding = false;
 }
 
 class Game extends Component {
@@ -366,6 +376,84 @@ class Game extends Component {
       : null
     );
     
+/*
+    var ctx = this.refs.canvas;
+    ctx.addEventListener("rightbuttonpress", (e) =>
+    e.button === 0
+      ? this.setState({
+        character: {
+          //y is constant
+          y: this.state.canvasY - (this.state.charScale),
+          //don't let it go all the way out of the canvas
+          x: Math.min(
+            this.state.character.x + 8,
+            this.state.canvasX - (this.state.charScale/2)
+          ),
+          radius: 20,
+          currentDirection: hampRight1,
+          stillMoving: true,
+        },
+      })
+      : null
+    );
+
+    ctx.addEventListener("rightbuttonrelease", (e) =>
+    e.button === 0
+      ? this.setState({
+        character: {
+          //y is constant
+          y: this.state.canvasY - (this.state.charScale),
+          //don't let it go all the way out of the canvas
+          x: Math.min(
+            this.state.character.x + 8,
+            this.state.canvasX - (this.state.charScale/2)
+          ),
+          radius: 20,
+          currentDirection: hampRight1,
+          stillMoving: false,
+        },
+      })
+      : null
+    );
+
+    ctx.addEventListener("leftbuttonpress", (e) =>
+    e.button === 0
+      ? this.setState({
+        character: {
+          //y is constant
+          y: this.state.canvasY - (this.state.charScale),
+          //don't let it go all the way out of the canvas
+          x: Math.min(
+            this.state.character.x - 8,
+            this.state.canvasX - (this.state.charScale/2)
+          ),
+          radius: 20,
+          currentDirection: hampRight1,
+          stillMoving: true,
+        },
+      })
+      : null
+    );
+
+    ctx.addEventListener("leftbuttonrelease", (e) =>
+    e.button === 0
+      ? this.setState({
+        character: {
+          //y is constant
+          y: this.state.canvasY - (this.state.charScale),
+          //don't let it go all the way out of the canvas
+          x: Math.min(
+            this.state.character.x - 8,
+            this.state.canvasX - (this.state.charScale/2)
+          ),
+          radius: 20,
+          currentDirection: hampRight1,
+          stillMoving: false,
+        },
+      })
+      : null
+    );
+*/
   }
 
 
@@ -386,6 +474,7 @@ class Game extends Component {
         currentDirection: hampLeft1,
       },
     })
+    
   };
 
   leftRelease = () => {
@@ -440,6 +529,8 @@ class Game extends Component {
     })
   };
 
+
+
   //This is what requires component to be defined
   //render() also must be defined with this
   componentDidMount() {
@@ -479,3 +570,7 @@ class Game extends Component {
   
 }
 export default Game;
+
+/*
+
+*/

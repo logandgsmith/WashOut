@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import fallingObject from "./Objects.js";
+import "./Game.css";
 
 //MUST PRESS RIGHT OR LEFT ARROW TO RENDER HAMPERMAN IN FRAME
 //background
 var laundrBG = new Image();
 laundrBG.src = "https://i.imgur.com/o1SC3Vi.png"
+
 //-------------SPRITES FOR CHARACTER MOVEMENT---------------------// 
 var hampImage   = new Image();
 var hampLeft1   = new Image();
@@ -158,6 +160,7 @@ class Game extends Component {
     //background color to clear canvas every frame
     ctx.fillStyle = "#EAEAEA";
     ctx.drawImage(laundrBG, 0, 0, this.refs.canvas.width, this.refs.canvas.height);
+
     //ball color
     //loop for falling objects
     for (var i = 0; i < objArr.length; i++) {
@@ -173,7 +176,6 @@ class Game extends Component {
         120
       );
     }
-
 
     for (var i = 0; i < hlthArr.length; i++) {
       ctx.drawImage(
@@ -202,7 +204,6 @@ class Game extends Component {
       this.state.charScale,
       this.state.charScale
     );
- 
   };
 
   //update is called every frame
@@ -301,6 +302,7 @@ class Game extends Component {
               ),
               radius: 20,
               currentDirection: hampLeft1,
+              stillMoving: true,
             },
           })
         : null
@@ -338,7 +340,7 @@ class Game extends Component {
             ),
             radius: 20,
             currentDirection: hampImage,
-            stillMoving: true,
+            stillMoving: false,
           },
         })
       : null
@@ -358,16 +360,85 @@ class Game extends Component {
             ),
             radius: 20,
             currentDirection: hampImage,
-            stillMoving: true,
+            stillMoving: false,
           },
         })
       : null
     );
+    
+  }
 
 
-   
+  
+  //Left Button Press
+  leftPress = () => {
+    this.setState({
+      character: {
+        //y is constant
+        y: this.state.canvasY - (this.state.charScale),
+        //x is variable and is moved by integer value
+        //dont let it go all the way to the max
+        x: Math.max(
+          this.state.character.x - 8,
+          - (this.state.charScale/2)
+        ),
+        radius: 20,
+        currentDirection: hampLeft1,
+      },
+    })
   };
 
+  leftRelease = () => {
+    this.setState({
+      character: {
+        //y is constant
+        y: this.state.canvasY - this.state.charScale,
+        //don't let it go all the way out of the canvas
+        x: Math.max(
+            this.state.character.x - 8,
+            - (this.state.charScale/2)
+        ),
+        radius: 20,
+        currentDirection: hampImage,
+        stillMoving: true,
+      },
+    })
+  };
+
+  //Right Button Press
+  rightPress = () => {
+    this.setState({
+      character: {
+        //y is constant
+        y: this.state.canvasY - (this.state.charScale),
+        //don't let it go all the way out of the canvas
+        x: Math.min(
+          this.state.character.x + 8,
+          this.state.canvasX - (this.state.charScale/2)
+        ),
+        radius: 20,
+        currentDirection: hampRight1,
+        stillMoving: false,
+      },
+    })
+  };
+
+  rightRelease = () => {
+    this.setState({
+      character: {
+        //y is constant
+        y: this.state.canvasY - (this.state.charScale),
+        //don't let it go all the way out of the canvas
+        x: Math.min(
+          this.state.character.x + 8,
+          this.state.canvasX - (this.state.charScale/2)
+        ),
+        radius: 20,
+        currentDirection: hampImage,
+        stillMoving: false,
+      },
+    })
+  };
 
   //This is what requires component to be defined
   //render() also must be defined with this
@@ -383,16 +454,28 @@ class Game extends Component {
     },1000)
     this.listen();
   }
+
   render() {
     return (
-      <div>
+      <div class="canvas">
         <canvas
           ref="canvas"
           width={this.state.canvasX}
           height={this.state.canvasY}
         />
+        <button
+          id="leftbutton"
+          onMouseDown={this.leftPress}
+          onMouseUp={this.leftRelease}
+        ></button>
+        <button
+          id="rightbutton"
+          onMouseDown={this.rightPress}
+          onMouseUp={this.rightRelease}
+        ></button>
       </div>
     );
   }
+  
 }
 export default Game;

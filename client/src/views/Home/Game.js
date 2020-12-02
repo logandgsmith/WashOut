@@ -116,15 +116,6 @@ for (var i = 0; i < numObj; i++) {
     );
 }
 
-// ========= Mouse Helpers ========== //
-var holding = false;
-function setHolding(){
-  holding = true;
-}
-function unsetHolding(){
-  holding = false;
-}
-
 class Game extends Component {
   //array of falling object
 
@@ -136,6 +127,8 @@ class Game extends Component {
     gravity: 0.5,
     charScale: 200,
     fallingObjNum: 10,
+    held: true,
+    direction: "",
     //At some point the x values will have to be set to some proportionality of the window size
     //that might have to be different for different devices
 
@@ -150,7 +143,7 @@ class Game extends Component {
       radius: 20,
       velocity: 0,
       currentDirection: hampImage,
-      stillMoving: false,
+      stillMoving: false,  
     },
   };
 
@@ -216,12 +209,12 @@ class Game extends Component {
     );
   };
 
+
   //update is called every frame
   update = () => {
     localStorage.setItem("vLoc",score);
 
     // Generates and updates Collectible/Obstacle/PowerUp status and sprite
-
     function updateFallingobject(falling){
       var generator = getRandomInt(0, 20);
       if(generator === 0 ){
@@ -293,70 +286,38 @@ class Game extends Component {
         continue;
       }
     }
+
+    if(this.state.held) {
+      switch(this.state.direction) {
+        case "left":
+          this.moveLeft();
+          break;
+        case "right":
+          this.moveRight();
+          break;
+        default:
+          return;
+      }
+    }
   };
   
+  ////////// LISTENERS //////////
   // Setup listeners at the beginning of the lifecycle
   listen = () => {
-    //keycode for left arrow
+    // Pressing the left arrow
     document.addEventListener("keydown", (e) =>
       e.keyCode === 37
-      ? this.setState({
-            character: {
-              //y is constante
-              y: this.state.canvasY - (this.state.charScale),
-              //x is variable and is moved by integer value
-              //dont let it go all the way to the max
-              x: Math.max(
-                this.state.character.x - 8,
-                - (this.state.charScale/2)
-              ),
-              radius: 20,
-              currentDirection: hampLeft1,
-              stillMoving: true,
-            },
-          })
+      ? this.moveLeft()
         : null
         );
-    //keycode for right arrow
+    // Pressing the right arrow
     document.addEventListener("keydown", (e) =>
       e.keyCode === 39
-        ? this.setState({
-            character: {
-              //y is constant
-              y: this.state.canvasY - (this.state.charScale),
-              //don't let it go all the way out of the canvas
-              x: Math.min(
-                this.state.character.x + 8,
-                this.state.canvasX - (this.state.charScale/2)
-              ),
-              radius: 20,
-              currentDirection: hampRight1,
-              stillMoving: true,
-            },
-          })
+        ? this.moveRight()
         : null
     );
 
-    document.addEventListener("keyup", (e) =>
-    e.keyCode === 39
-      ? this.setState({
-          character: {
-            //y is constant
-            y: this.state.canvasY - (this.state.charScale),
-            //don't let it go all the way out of the canvas
-            x: Math.min(
-              this.state.character.x + 8,
-              this.state.canvasX - (this.state.charScale/2)
-            ),
-            radius: 20,
-            currentDirection: hampImage,
-            stillMoving: false,
-          },
-        })
-      : null
-    );
-
-       //keycode for left arrow 
+    // Releasing the Left arrow 
     document.addEventListener("keyup", (e) =>
     e.keyCode === 37
       ? this.setState({
@@ -375,94 +336,71 @@ class Game extends Component {
         })
       : null
     );
-    
-/*
-    var ctx = this.refs.canvas;
-    ctx.addEventListener("rightbuttonpress", (e) =>
-    e.button === 0
-      ? this.setState({
-        character: {
-          //y is constant
-          y: this.state.canvasY - (this.state.charScale),
-          //don't let it go all the way out of the canvas
-          x: Math.min(
-            this.state.character.x + 8,
-            this.state.canvasX - (this.state.charScale/2)
-          ),
-          radius: 20,
-          currentDirection: hampRight1,
-          stillMoving: true,
-        },
-      })
-      : null
-    );
 
-    ctx.addEventListener("rightbuttonrelease", (e) =>
-    e.button === 0
+    //Releasing the right arrow
+    document.addEventListener("keyup", (e) =>
+    e.keyCode === 39
       ? this.setState({
-        character: {
-          //y is constant
-          y: this.state.canvasY - (this.state.charScale),
-          //don't let it go all the way out of the canvas
-          x: Math.min(
-            this.state.character.x + 8,
-            this.state.canvasX - (this.state.charScale/2)
-          ),
-          radius: 20,
-          currentDirection: hampRight1,
-          stillMoving: false,
-        },
-      })
+          character: {
+            //y is constant
+            y: this.state.canvasY - (this.state.charScale),
+            //don't let it go all the way out of the canvas
+            x: Math.min(
+              this.state.character.x + 8,
+              this.state.canvasX - (this.state.charScale/2)
+            ),
+            radius: 20,
+            currentDirection: hampImage,
+            stillMoving: false,
+          },
+        })
       : null
     );
-
-    ctx.addEventListener("leftbuttonpress", (e) =>
-    e.button === 0
-      ? this.setState({
-        character: {
-          //y is constant
-          y: this.state.canvasY - (this.state.charScale),
-          //don't let it go all the way out of the canvas
-          x: Math.min(
-            this.state.character.x - 8,
-            this.state.canvasX - (this.state.charScale/2)
-          ),
-          radius: 20,
-          currentDirection: hampRight1,
-          stillMoving: true,
-        },
-      })
-      : null
-    );
-
-    ctx.addEventListener("leftbuttonrelease", (e) =>
-    e.button === 0
-      ? this.setState({
-        character: {
-          //y is constant
-          y: this.state.canvasY - (this.state.charScale),
-          //don't let it go all the way out of the canvas
-          x: Math.min(
-            this.state.character.x - 8,
-            this.state.canvasX - (this.state.charScale/2)
-          ),
-          radius: 20,
-          currentDirection: hampRight1,
-          stillMoving: false,
-        },
-      })
-      : null
-    );
-*/
   }
 
-
-  
-  //Left Button Press
+  ////////// TOUCH CONTROLS //////////
+  // Left Button Presssed
   leftPress = () => {
     this.setState({
+      held: true,
+      direction: "left"
+    })
+  };
+
+  // Right button pressed
+  rightPress = () => {
+    this.setState({
+      held: true,
+      direction: "right"
+    })
+  };
+
+  // Button Released
+  releasePress = () => {
+    this.setState({
+      held: false,
+      direction: "",
       character: {
         //y is constant
+        y: this.state.canvasY - (this.state.charScale),
+        //don't let it go all the way out of the canvas
+        x: Math.min(
+          this.state.character.x + 8,
+          this.state.canvasX - (this.state.charScale/2)
+        ),
+        radius: 20,
+        currentDirection: hampImage,
+        stillMoving: false,
+      },
+    })
+  };
+
+
+  ////////// MOVEMENT LOGIC //////////
+  moveLeft = () => {
+    this.setState({
+      character: {
+        //y is constante
         y: this.state.canvasY - (this.state.charScale),
         //x is variable and is moved by integer value
         //dont let it go all the way to the max
@@ -472,62 +410,28 @@ class Game extends Component {
         ),
         radius: 20,
         currentDirection: hampLeft1,
-      },
-    })
-    
-  };
-
-  leftRelease = () => {
-    this.setState({
-      character: {
-        //y is constant
-        y: this.state.canvasY - this.state.charScale,
-        //don't let it go all the way out of the canvas
-        x: Math.max(
-            this.state.character.x - 8,
-            - (this.state.charScale/2)
-        ),
-        radius: 20,
-        currentDirection: hampImage,
         stillMoving: true,
       },
     })
-  };
+  }
 
-  //Right Button Press
-  rightPress = () => {
+  moveRight = () => {
     this.setState({
       character: {
-        //y is constant
+        //y is constante
         y: this.state.canvasY - (this.state.charScale),
-        //don't let it go all the way out of the canvas
-        x: Math.min(
+        //x is variable and is moved by integer value
+        //dont let it go all the way to the max
+        x: Math.max(
           this.state.character.x + 8,
-          this.state.canvasX - (this.state.charScale/2)
+          (this.state.charScale/2)
         ),
         radius: 20,
         currentDirection: hampRight1,
-        stillMoving: false,
+        stillMoving: true,
       },
     })
-  };
-
-  rightRelease = () => {
-    this.setState({
-      character: {
-        //y is constant
-        y: this.state.canvasY - (this.state.charScale),
-        //don't let it go all the way out of the canvas
-        x: Math.min(
-          this.state.character.x + 8,
-          this.state.canvasX - (this.state.charScale/2)
-        ),
-        radius: 20,
-        currentDirection: hampImage,
-        stillMoving: false,
-      },
-    })
-  };
+  }
 
 
 
@@ -557,12 +461,12 @@ class Game extends Component {
         <button
           id="leftbutton"
           onMouseDown={this.leftPress}
-          onMouseUp={this.leftRelease}
+          onMouseUp={this.releasePress}
         ></button>
         <button
           id="rightbutton"
           onMouseDown={this.rightPress}
-          onMouseUp={this.rightRelease}
+          onMouseUp={this.releasePress}
         ></button>
       </div>
     );

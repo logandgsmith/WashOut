@@ -1,7 +1,7 @@
 .container{
-    position: relative;
-    width: 650;
-    height: 800;
+    position: absolute;
+    width: 650px;
+    height: 800px;
 }
 #canvas {
     position: absolute;
@@ -13,7 +13,7 @@
     outline: none;
     border: none;
     left: 50%;
-    top: 47%;
+    top: 440px;
     width: 325px;
     height: 800px;
 }
@@ -24,7 +24,7 @@
     outline: none;
     border: none;
     right: 50%;
-    top: 47%;
+    top: 440px;
     width: 325px;
     height: 800px;
 }

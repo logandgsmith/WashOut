@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import "./Header.css";
-import { Nav, Navbar, Form, FormControl, Button } from "react-bootstrap";
+import { Nav, Navbar, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 var score = 0
@@ -23,7 +23,7 @@ class Header extends Component {
         <img src="https://i.imgur.com/nhjOSV3.png"></img>
         <p id="title">WashOut!</p>
         <p id="secret">You found a secret page!</p>
-        <p id="something">Sorry we couldn't find the page you were looking for, but please enjoy this special game instead</p>
+        <p id="apology">Sorry we couldn't find the page you were looking for, but please enjoy this special game instead</p>
 
         {/* Page Links */}
           <Navbar className="nav-style" variant="light">

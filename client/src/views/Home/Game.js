@@ -51,8 +51,10 @@ collectible5.src = "https://i.imgur.com/pum5vSq.png";
 var collectibles = [collectible1, collectible2, collectible3, collectible4, collectible5];
 
 var powerUp1 = new Image();
+var bomb1 = new Image();
 
-powerUp1.src = "https://i.imgur.com/S4848AL.png";
+powerUp1.src = "https://i.imgur.com/BAbtzry.png";
+bomb1.src = "https://i.imgur.com/gQkMLtB.png";
 
 //----------------------------------------------------------------//
 
@@ -86,6 +88,49 @@ function decreaseHealth(){
     //lose game function
     //reset game?
   }
+}
+function increaseHealth(){
+  if(health === 2){
+    hlthArr.push(new fallingObject (    
+      2*50+150,
+      50,
+      5,
+      0,
+      650,
+      850,
+      false,
+      false,
+      hampImage))
+    health+=1;
+  }
+  else if(health === 1){
+    hlthArr.push(new fallingObject (    
+      1*50+150,
+      50,
+      5,
+      0,
+      650,
+      850,
+      false,
+      false,
+      hampImage))
+    health+=1;
+  }
+  else if(health === 0){
+
+    hlthArr.push(new fallingObject (    
+      0*50+150,
+      50,
+      5,
+      0,
+      650,
+      850,
+      false,
+      false,
+      hampImage))
+    health+=1;
+  }
+  
 }
 for (var i =0;i<health;i++){
   hlthArr[i] = new fallingObject(
@@ -139,7 +184,7 @@ class Game extends Component {
       x: 50,
       //get the player way down in the screen until a movement key is pressed
       //I couldn't figure out how to get (this.state.canvasY - this.state.character.radius) to work for the y value
-      y: 10000,
+      y: importedCanvasY - 200,
       radius: 20,
       velocity: 0,
       currentDirection: hampImage,
@@ -220,15 +265,23 @@ class Game extends Component {
       if(generator === 0 ){
         falling.setObstacle(false);
         falling.setPowerUp(true);
+        falling.setBomb(false);
         falling.currentDirection = powerUp1;
-      }else if (generator >= 1 && generator <= 10){
+      }else if (generator === 1) {
+        falling.setObstacle(false);
+        falling.setPowerUp(false);
+        falling.setBomb(true);
+        falling.currentDirection = bomb1;
+      }else if (generator >= 2 && generator <= 11){
         falling.setObstacle(true);
         falling.setPowerUp(false);
+        falling.setBomb(false);
         var rand = getRandomInt(1,5);
         falling.currentDirection = obstacles[rand - 1];
       }else{
         falling.setObstacle(false);
         falling.setPowerUp(false);
+        falling.setBomb(false);
         var rand = getRandomInt(1,5);
         falling.currentDirection = collectibles[rand - 1];
       }
@@ -245,7 +298,7 @@ class Game extends Component {
           objArr[i].y + objArr[i].velocity,
           this.refs.canvas.height - objArr[i].radius
         ),
-        0
+        -200
       );
       objArr[i].setY(y);
 
@@ -259,10 +312,31 @@ class Game extends Component {
             if(objArr[i].isObstacle()){
               decreaseHealth();
               decreaseScore(10);
+              //reset object if it's harmful 
+              objArr[i].setRandomX();
+              objArr[i].setY(objArr[i].defaultY);
+              updateFallingobject(objArr[i]);
             }
-            else 
+            else if(objArr[i].isBomb()){
+              //if is bomb we increase score and reset all objects to default y
+              for (var i = 0; i < objArr.length; i++) {
+                objArr[i].setRandomX();
+                objArr[i].setY(objArr[i].defaultY);
+                updateFallingobject(objArr[i]);
+              }
               increaseScore(10);
-
+              continue;
+            }
+            else if (objArr[i].isPowerUp()){
+              increaseScore(10);
+              // Reset the object
+              objArr[i].setRandomX();
+              objArr[i].setY(objArr[i].defaultY);
+              // add life if applicable
+              increaseHealth();
+            }
+            else{ 
+              increaseScore(10);
             // Reset the object
             objArr[i].setRandomX();
             objArr[i].setY(objArr[i].defaultY);
@@ -270,7 +344,8 @@ class Game extends Component {
             // Updates status and sprite of falling object
             updateFallingobject(objArr[i]);
 
-            continue;
+            
+            }
         }
       }
 

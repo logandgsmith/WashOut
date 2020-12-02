@@ -27,7 +27,7 @@ class Header extends Component {
 
         {/* Page Links */}
           <Navbar className="nav-style" variant="light">
-              <Button variant="light" size="lg">PLAY</Button>
+              <Button variant="light" size="lg" onClick={this.props.startGame}>PLAY</Button>
               <Nav className="mr-auto">
               </Nav>
               <h5 inline className="head3" >Current Score: <span className="currScore"> {score} </span>High Score: <span className="hiScore"> 0</span></h5>

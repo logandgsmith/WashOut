@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import fallingObject from "./Objects.js";
+import "./Game.css";
 
 //MUST PRESS RIGHT OR LEFT ARROW TO RENDER HAMPERMAN IN FRAME
-
+//background
+var laundrBG = new Image();
+laundrBG.src = "https://i.imgur.com/o1SC3Vi.png"
 
 //-------------SPRITES FOR CHARACTER MOVEMENT---------------------// 
 var hampImage   = new Image();
@@ -48,8 +51,10 @@ collectible5.src = "https://i.imgur.com/pum5vSq.png";
 var collectibles = [collectible1, collectible2, collectible3, collectible4, collectible5];
 
 var powerUp1 = new Image();
+var bomb1 = new Image();
 
-powerUp1.src = "https://i.imgur.com/S4848AL.png";
+powerUp1.src = "https://i.imgur.com/BAbtzry.png";
+bomb1.src = "https://i.imgur.com/gQkMLtB.png";
 
 //----------------------------------------------------------------//
 
@@ -84,6 +89,49 @@ function decreaseHealth(){
     //reset game?
   }
 }
+function increaseHealth(){
+  if(health === 2){
+    hlthArr.push(new fallingObject (    
+      2*50+150,
+      50,
+      5,
+      0,
+      650,
+      850,
+      false,
+      false,
+      hampImage))
+    health+=1;
+  }
+  else if(health === 1){
+    hlthArr.push(new fallingObject (    
+      1*50+150,
+      50,
+      5,
+      0,
+      650,
+      850,
+      false,
+      false,
+      hampImage))
+    health+=1;
+  }
+  else if(health === 0){
+
+    hlthArr.push(new fallingObject (    
+      0*50+150,
+      50,
+      5,
+      0,
+      650,
+      850,
+      false,
+      false,
+      hampImage))
+    health+=1;
+  }
+  
+}
 for (var i =0;i<health;i++){
   hlthArr[i] = new fallingObject(
     i*50+150,
@@ -98,6 +146,7 @@ for (var i =0;i<health;i++){
   );
 }
 
+// Sets the falling objects initial image
 for (var i = 0; i < numObj; i++) {
     objArr[i] = new fallingObject(
       Math.random() * importedCanvasX,
@@ -123,6 +172,8 @@ class Game extends Component {
     gravity: 0.5,
     charScale: 200,
     fallingObjNum: 10,
+    held: true,
+    direction: "",
     //At some point the x values will have to be set to some proportionality of the window size
     //that might have to be different for different devices
 
@@ -133,11 +184,11 @@ class Game extends Component {
       x: 50,
       //get the player way down in the screen until a movement key is pressed
       //I couldn't figure out how to get (this.state.canvasY - this.state.character.radius) to work for the y value
-      y: 10000,
+      y: importedCanvasY - 200,
       radius: 20,
       velocity: 0,
       currentDirection: hampImage,
-      stillMoving: false,
+      stillMoving: false,  
     },
   };
 
@@ -156,8 +207,8 @@ class Game extends Component {
     const ctx = this.refs.canvas.getContext("2d");
     //background color to clear canvas every frame
     ctx.fillStyle = "#EAEAEA";
+    ctx.drawImage(laundrBG, 0, 0, this.refs.canvas.width, this.refs.canvas.height);
 
-    ctx.fillRect(0, 0, this.refs.canvas.width, this.refs.canvas.height);
     //ball color
     //loop for falling objects
     for (var i = 0; i < objArr.length; i++) {
@@ -173,7 +224,6 @@ class Game extends Component {
         120
       );
     }
-
 
     for (var i = 0; i < hlthArr.length; i++) {
       ctx.drawImage(
@@ -197,34 +247,41 @@ class Game extends Component {
       640,
       //set x and y coordinates (starts from upper lefthand corner of sprite, hence subtracting the char scale)
       this.state.character.x,
-      this.state.character.y,
+      this.state.character.y+25,
       //sets the size of the image to be drawn
       this.state.charScale,
       this.state.charScale
     );
- 
   };
+
 
   //update is called every frame
   update = () => {
     localStorage.setItem("vLoc",score);
 
     // Generates and updates Collectible/Obstacle/PowerUp status and sprite
-
     function updateFallingobject(falling){
       var generator = getRandomInt(0, 20);
       if(generator === 0 ){
         falling.setObstacle(false);
         falling.setPowerUp(true);
+        falling.setBomb(false);
         falling.currentDirection = powerUp1;
-      }else if (generator >= 1 && generator <= 10){
+      }else if (generator === 1) {
+        falling.setObstacle(false);
+        falling.setPowerUp(false);
+        falling.setBomb(true);
+        falling.currentDirection = bomb1;
+      }else if (generator >= 2 && generator <= 11){
         falling.setObstacle(true);
         falling.setPowerUp(false);
+        falling.setBomb(false);
         var rand = getRandomInt(1,5);
         falling.currentDirection = obstacles[rand - 1];
       }else{
         falling.setObstacle(false);
         falling.setPowerUp(false);
+        falling.setBomb(false);
         var rand = getRandomInt(1,5);
         falling.currentDirection = collectibles[rand - 1];
       }
@@ -241,7 +298,7 @@ class Game extends Component {
           objArr[i].y + objArr[i].velocity,
           this.refs.canvas.height - objArr[i].radius
         ),
-        0
+        -200
       );
       objArr[i].setY(y);
 
@@ -255,10 +312,31 @@ class Game extends Component {
             if(objArr[i].isObstacle()){
               decreaseHealth();
               decreaseScore(10);
+              //reset object if it's harmful 
+              objArr[i].setRandomX();
+              objArr[i].setY(objArr[i].defaultY);
+              updateFallingobject(objArr[i]);
             }
-            else 
+            else if(objArr[i].isBomb()){
+              //if is bomb we increase score and reset all objects to default y
+              for (var i = 0; i < objArr.length; i++) {
+                objArr[i].setRandomX();
+                objArr[i].setY(objArr[i].defaultY);
+                updateFallingobject(objArr[i]);
+              }
               increaseScore(10);
-
+              continue;
+            }
+            else if (objArr[i].isPowerUp()){
+              increaseScore(10);
+              // Reset the object
+              objArr[i].setRandomX();
+              objArr[i].setY(objArr[i].defaultY);
+              // add life if applicable
+              increaseHealth();
+            }
+            else{ 
+              increaseScore(10);
             // Reset the object
             objArr[i].setRandomX();
             objArr[i].setY(objArr[i].defaultY);
@@ -266,7 +344,8 @@ class Game extends Component {
             // Updates status and sprite of falling object
             updateFallingobject(objArr[i]);
 
-            continue;
+            
+            }
         }
       }
 
@@ -282,69 +361,38 @@ class Game extends Component {
         continue;
       }
     }
+
+    if(this.state.held) {
+      switch(this.state.direction) {
+        case "left":
+          this.moveLeft();
+          break;
+        case "right":
+          this.moveRight();
+          break;
+        default:
+          return;
+      }
+    }
   };
   
+  ////////// LISTENERS //////////
   // Setup listeners at the beginning of the lifecycle
   listen = () => {
-    //keycode for left arrow
+    // Pressing the left arrow
     document.addEventListener("keydown", (e) =>
       e.keyCode === 37
-      ? this.setState({
-            character: {
-              //y is constante
-              y: this.state.canvasY - (this.state.charScale),
-              //x is variable and is moved by integer value
-              //dont let it go all the way to the max
-              x: Math.max(
-                this.state.character.x - 8,
-                - (this.state.charScale/2)
-              ),
-              radius: 20,
-              currentDirection: hampLeft1,
-            },
-          })
+      ? this.moveLeft()
         : null
         );
-    //keycode for right arrow
+    // Pressing the right arrow
     document.addEventListener("keydown", (e) =>
       e.keyCode === 39
-        ? this.setState({
-            character: {
-              //y is constant
-              y: this.state.canvasY - (this.state.charScale),
-              //don't let it go all the way out of the canvas
-              x: Math.min(
-                this.state.character.x + 8,
-                this.state.canvasX - (this.state.charScale/2)
-              ),
-              radius: 20,
-              currentDirection: hampRight1,
-              stillMoving: true,
-            },
-          })
+        ? this.moveRight()
         : null
     );
 
-    document.addEventListener("keyup", (e) =>
-    e.keyCode === 39
-      ? this.setState({
-          character: {
-            //y is constant
-            y: this.state.canvasY - (this.state.charScale),
-            //don't let it go all the way out of the canvas
-            x: Math.min(
-              this.state.character.x + 8,
-              this.state.canvasX - (this.state.charScale/2)
-            ),
-            radius: 20,
-            currentDirection: hampImage,
-            stillMoving: true,
-          },
-        })
-      : null
-    );
-
-       //keycode for left arrow 
+    // Releasing the Left arrow 
     document.addEventListener("keyup", (e) =>
     e.keyCode === 37
       ? this.setState({
@@ -358,15 +406,108 @@ class Game extends Component {
             ),
             radius: 20,
             currentDirection: hampImage,
-            stillMoving: true,
+            stillMoving: false,
           },
         })
       : null
     );
 
+    //Releasing the right arrow
+    document.addEventListener("keyup", (e) =>
+    e.keyCode === 39
+      ? this.setState({
+          character: {
+            //y is constant
+            y: this.state.canvasY - (this.state.charScale),
+            //don't let it go all the way out of the canvas
+            x: Math.min(
+              this.state.character.x + 8,
+              this.state.canvasX - (this.state.charScale/2)
+            ),
+            radius: 20,
+            currentDirection: hampImage,
+            stillMoving: false,
+          },
+        })
+      : null
+    );
+  }
 
-   
+  ////////// TOUCH CONTROLS //////////
+  // Left Button Presssed
+  leftPress = () => {
+    this.setState({
+      held: true,
+      direction: "left"
+    })
   };
+
+  // Right button pressed
+  rightPress = () => {
+    this.setState({
+      held: true,
+      direction: "right"
+    })
+  };
+
+  // Button Released
+  releasePress = () => {
+    this.setState({
+      held: false,
+      direction: "",
+      character: {
+        //y is constant
+        y: this.state.canvasY - (this.state.charScale),
+        //don't let it go all the way out of the canvas
+        x: Math.min(
+          this.state.character.x + 8,
+          this.state.canvasX - (this.state.charScale/2)
+        ),
+        radius: 20,
+        currentDirection: hampImage,
+        stillMoving: false,
+      },
+    })
+  };
+
+
+  ////////// MOVEMENT LOGIC //////////
+  moveLeft = () => {
+    this.setState({
+      character: {
+        //y is constante
+        y: this.state.canvasY - (this.state.charScale),
+        //x is variable and is moved by integer value
+        //dont let it go all the way to the max
+        x: Math.max(
+          this.state.character.x - 8,
+          - (this.state.charScale/2)
+        ),
+        radius: 20,
+        currentDirection: hampLeft1,
+        stillMoving: true,
+      },
+    })
+  }
+
+  moveRight = () => {
+    this.setState({
+      character: {
+        //y is constante
+        y: this.state.canvasY - (this.state.charScale),
+        //x is variable and is moved by integer value
+        //dont let it go all the way to the max
+        x: Math.max(
+          this.state.character.x + 8,
+          (this.state.charScale/2)
+        ),
+        radius: 20,
+        currentDirection: hampRight1,
+        stillMoving: true,
+      },
+    })
+  }
+
 
 
   //This is what requires component to be defined
@@ -383,16 +524,32 @@ class Game extends Component {
     },1000)
     this.listen();
   }
+
   render() {
     return (
-      <div>
+      <div class="canvas">
         <canvas
           ref="canvas"
           width={this.state.canvasX}
           height={this.state.canvasY}
         />
+        <button
+          id="leftbutton"
+          onMouseDown={this.leftPress}
+          onMouseUp={this.releasePress}
+        ></button>
+        <button
+          id="rightbutton"
+          onMouseDown={this.rightPress}
+          onMouseUp={this.releasePress}
+        ></button>
       </div>
     );
   }
+  
 }
 export default Game;
+
+/*
+
+*/

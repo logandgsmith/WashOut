@@ -537,11 +537,15 @@ class Game extends Component {
           id="leftbutton"
           onMouseDown={this.leftPress}
           onMouseUp={this.releasePress}
+          onTouchStart={this.leftPress}
+          onTouchEnd={this.releasePress}
         ></button>
         <button
           id="rightbutton"
           onMouseDown={this.rightPress}
           onMouseUp={this.releasePress}
+          onTouchStart={this.rightPress}
+          onTouchEnd={this.releasePress}
         ></button>
       </div>
     );

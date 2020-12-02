@@ -527,7 +527,7 @@ class Game extends Component {
 
   render() {
     return (
-      <div class="canvas">
+      <div class=".container">
         <canvas
           ref="canvas"
           width={this.state.canvasX}

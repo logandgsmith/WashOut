@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Home.css';
 import Game from './Game';
+import Instr from './Instr';
 
 const Home = (props) => {
   if(props.isPlaying) {
@@ -13,7 +14,7 @@ const Home = (props) => {
   else {
     return (
       <div className="App">
-        {/*TODO: ADD SOMETHING WHEN THE GAME ISN'T PLAYING*/}
+        <Instr />
       </div>
     )
   }

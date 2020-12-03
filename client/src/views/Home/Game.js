@@ -63,7 +63,7 @@ var importedCanvasY = 800;
 var numObj = 5;
 var score= 0;
 var objArr = [];
-var timer= 150;
+var timer= 180;
 var health=3;
 var hlthArr=[];
 

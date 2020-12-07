@@ -8,8 +8,7 @@
 }
 #rightbutton {
     position: absolute;
-    background-color: red;
-    opacity: 0.05;
+    background-color: transparent;
     outline: none;
     border: none;
     left: 50%;
@@ -19,8 +18,7 @@
 }
 #leftbutton {
     position: absolute;
-    background-color: blue;
-    opacity: 0.05;
+    background-color: transparent;
     outline: none;
     border: none;
     right: 50%;

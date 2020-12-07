@@ -130,7 +130,10 @@ class Instr extends Component{
             )
         ctx.fillText("Life-gainer                                   Bomb ",175,675)
         ctx.fillText("(Clears the laundromat) ",330,695)
-
+        ctx.font = "30px Roboto"
+        ctx.textAlign = 'center'
+        ctx.fillStyle = 'red'
+        ctx.fillText("PRESS PLAY TO BEGIN!",340,725)
     }
     componentDidMount() {
        this.draw();

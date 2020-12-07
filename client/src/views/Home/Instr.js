@@ -74,8 +74,8 @@ class Instr extends Component{
         ctx.fillText("INSTRUCTIONS:",250, 50);
         ctx.fillText("Move left and right to catch the collectibles",100,100)
         ctx.fillText("or avoid the obstacles! ",100,125)
-        ctx.fillText("Try to get as many collectibles as you can before ",100,175)
-        ctx.fillText("the time runs out!",100,200)
+        ctx.fillText("Try to get as many collectibles as you can! ",100,175)
+        
 
         ctx.font = "16px Roboto"
         ctx.fillText("Collectibles:                                  Obstacles:",150,250)

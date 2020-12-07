@@ -56,6 +56,7 @@ var bomb1 = new Image();
 powerUp1.src = "https://i.imgur.com/BAbtzry.png";
 bomb1.src = "https://i.imgur.com/gQkMLtB.png";
 
+
 //----------------------------------------------------------------//
 
 var importedCanvasX = 650;
@@ -63,7 +64,7 @@ var importedCanvasY = 800;
 var numObj = 5;
 var score= 0;
 var objArr = [];
-var timer= 150;
+var maxHealth = 3;
 var health=3;
 var hlthArr=[];
 
@@ -73,53 +74,15 @@ function getRandomInt(min, max){
   var maximum = Math.floor(max);
   return Math.floor(Math.random() * (maximum - minimum + 1) + minimum);
 }
-function decreaseScore(num){
-  score-=num
-}
-function increaseScore(num){
-  score+=num;
-}
-function decreaseHealth(){
-  if(health > 0){
-    hlthArr.pop();
-    health-=1;
-  } 
-  else{
-    //lose game function
-    //reset game?
-  }
-}
-function increaseHealth(){
-  if(health === 2){
-    hlthArr.push(new fallingObject (    
-      2*50+150,
-      50,
-      5,
-      0,
-      650,
-      850,
-      false,
-      false,
-      hampImage))
-    health+=1;
-  }
-  else if(health === 1){
-    hlthArr.push(new fallingObject (    
-      1*50+150,
-      50,
-      5,
-      0,
-      650,
-      850,
-      false,
-      false,
-      hampImage))
-    health+=1;
-  }
-  else if(health === 0){
 
-    hlthArr.push(new fallingObject (    
-      0*50+150,
+
+//---------------PREGAME FUNCTIONS-----------------------// 
+// Sets the Health Icons Initial image
+function setMaxHealth() {
+  health = maxHealth;
+  for (var i =0; i< health; i++){
+    hlthArr[i] = new fallingObject(
+      i*50+150,
       50,
       5,
       0,
@@ -127,70 +90,145 @@ function increaseHealth(){
       850,
       false,
       false,
-      hampImage))
-    health+=1;
+      hampImage
+    );
   }
-  
-}
-for (var i =0;i<health;i++){
-  hlthArr[i] = new fallingObject(
-    i*50+150,
-    50,
-    5,
-    0,
-    650,
-    850,
-    false,
-    false,
-    hampImage
-  );
 }
 
 // Sets the falling objects initial image
-for (var i = 0; i < numObj; i++) {
-    objArr[i] = new fallingObject(
-      Math.random() * importedCanvasX,
-      50,
-      20,
-      0,
-      650,
-      800,
-      false,
-      false,
-      collectibles[i]
-    );
+function setInitialItems() {
+  for (var i = 0; i < numObj; i++) {
+      objArr[i] = new fallingObject(
+        Math.random() * importedCanvasX,
+        50,
+        20,
+        0,
+        650,
+        800,
+        false,
+        false,
+        collectibles[i]
+      );
+  }
 }
 
-class Game extends Component {
-  //array of falling object
+//----------------------------------------------------------------//
 
-  state = {
-    canvasX: importedCanvasX,
-    canvasY: importedCanvasY,
-    defaultX: 325,
-    defaultY: 50,
-    gravity: 0.5,
-    charScale: 200,
-    fallingObjNum: 10,
-    held: true,
-    direction: "",
+class Game extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      // Game Flow Variables
+      gameInterval: null,
+      isGameOver: false,
+      hasWonGame: false,
+      // Canvas and positioning
+      canvasX: importedCanvasX,
+      canvasY: importedCanvasY,
+      defaultX: 325,
+      defaultY: 50,
+      // Force of gravity (acceleration) on falling objects
+      gravity: 0.5,
+      fallingObjNum: 10,
+      // Character global variables
+      charScale: 200,
+      held: true,
+      direction: "",
+      // Character information
+      character: {
+        x: 50,                       // X position on sceen
+        y: importedCanvasY - 200,    // Y position on screen
+        radius: 20,                  // Sprite radius
+        velocity: 0,                 // Character speed
+        currentDirection: hampImage, // Current sprite
+        stillMoving: false,          // If the character is still moving (for touch controls)
+      },
+    };
+
+    this.handleGameOver = this.handleGameOver.bind();
     //At some point the x values will have to be set to some proportionality of the window size
     //that might have to be different for different devices
+  }
 
+  //--------------------------SCORING AND HANDLE GAME OVER--------------------------------------//
 
-    character: {
-      //just setting attribuites for ctx.arc to draw a circle
-      //could probably be used later for hitboxes
-      x: 50,
-      //get the player way down in the screen until a movement key is pressed
-      //I couldn't figure out how to get (this.state.canvasY - this.state.character.radius) to work for the y value
-      y: importedCanvasY - 200,
-      radius: 20,
-      velocity: 0,
-      currentDirection: hampImage,
-      stillMoving: false,  
-    },
-  };
+  handleGameOver = () => {
+    clearInterval(this.state.gameInterval);
+    this.props.handleGameOver(this.state.hasWonGame);
+  }
+
+  increaseScore(num){
+    score += num;
+    if(score > 999)
+      score = 999;
+    if(score == 999) {
+      this.state.isGameOver = true;
+      this.state.hasWonGame = true; // Game Over WIN
+    }  
+  }
+  
+  decreaseHealth(){
+    health -= 1;
+    if(health > 0){
+      hlthArr.pop();
+    } 
+    else{
+      this.state.isGameOver = true;
+      this.state.hasWonGame = false; // Game Over LOSE
+    }
+  }
+
+  decreaseScore(num){
+    score-=num
+    if(score < 0)
+      score = 0;
+  }
+  
+  increaseHealth(){
+    if(health === 2){
+      hlthArr.push(new fallingObject (    
+        2*50+150,
+        50,
+        5,
+        0,
+        650,
+        850,
+        false,
+        false,
+        hampImage))
+      health+=1;
+    }
+    else if(health === 1){
+      hlthArr.push(new fallingObject (    
+        1*50+150,
+        50,
+        5,
+        0,
+        650,
+        850,
+        false,
+        false,
+        hampImage))
+      health+=1;
+    }
+    else if(health === 0){
+  
+      hlthArr.push(new fallingObject (    
+        0*50+150,
+        50,
+        5,
+        0,
+        650,
+        850,
+        false,
+        false,
+        hampImage))
+      health+=1;
+    }
+    
+  }
+
+  //---------------------------DRAWING FUNCTIONS--------------------------------------//
 
   randX = () => {
     return Math.random() * this.state.canvasX;
@@ -310,8 +348,8 @@ class Game extends Component {
 
             // Check if this item is harmful
             if(objArr[i].isObstacle()){
-              decreaseHealth();
-              decreaseScore(10);
+              this.decreaseHealth();
+              this.decreaseScore(10);
               //reset object if it's harmful 
               objArr[i].setRandomX();
               objArr[i].setY(objArr[i].defaultY);
@@ -324,19 +362,19 @@ class Game extends Component {
                 objArr[i].setY(objArr[i].defaultY);
                 updateFallingobject(objArr[i]);
               }
-              increaseScore(10);
+              this.increaseScore(10);
               continue;
             }
             else if (objArr[i].isPowerUp()){
-              increaseScore(10);
+              this.increaseScore(10);
               // Reset the object
               objArr[i].setRandomX();
               objArr[i].setY(objArr[i].defaultY);
               // add life if applicable
-              increaseHealth();
+              this.increaseHealth();
             }
             else{ 
-              increaseScore(10);
+              this.increaseScore(10);
             // Reset the object
             objArr[i].setRandomX();
             objArr[i].setY(objArr[i].defaultY);
@@ -376,7 +414,7 @@ class Game extends Component {
     }
   };
   
-  ////////// LISTENERS //////////
+//------------------------------LISTENERS----------------------------------//
   // Setup listeners at the beginning of the lifecycle
   listen = () => {
     // Pressing the left arrow
@@ -433,7 +471,7 @@ class Game extends Component {
     );
   }
 
-  ////////// TOUCH CONTROLS //////////
+//--------------------------------TOUCH CONTROLS--------------------------------//
   // Left Button Presssed
   leftPress = () => {
     this.setState({
@@ -471,7 +509,7 @@ class Game extends Component {
   };
 
 
-  ////////// MOVEMENT LOGIC //////////
+//---------------------------------MOVEMENT LOGIC-------------------------------//
   moveLeft = () => {
     this.setState({
       character: {
@@ -509,20 +547,34 @@ class Game extends Component {
   }
 
 
+  //------------------------------LIFECYCLE FUNCTIONS----------------------------------//
 
   //This is what requires component to be defined
   //render() also must be defined with this
   componentDidMount() {
-    setInterval(() => {
-      this.update();
-      this.draw(this.state.character.currentDirection);
-      this.drawl();
-    }, 1000 / 60); //1000 milliseconds divided by 60 seconds = 60fps
-    setInterval(() => {
-      increaseScore(1);
-      timer-=1;
-    },1000)
-    this.listen();
+    if(this.props.isPlaying) {
+      // Reset values
+      setMaxHealth();
+      setInitialItems();
+      score = 0;
+
+      // Start the gameplay loop
+      this.state.gameInterval = setInterval(() => {
+        this.update();
+        this.draw(this.state.character.currentDirection);
+        this.drawl();
+        if(this.state.isGameOver)
+          this.handleGameOver();
+      }, 1000 / 60); //1000 milliseconds divided by 60 seconds = 60fps
+
+      // Start a score timer
+      setInterval(() => {
+        this.increaseScore(1);
+      },1000)
+
+      // Begin Listening
+      this.listen();
+    }
   }
 
   render() {
@@ -549,9 +601,10 @@ class Game extends Component {
         ></button>
       </div>
     );
-  }
-  
 }
+
+}
+
 export default Game;
 
 /*

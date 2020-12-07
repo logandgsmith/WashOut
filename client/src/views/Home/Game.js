@@ -56,6 +56,23 @@ var bomb1 = new Image();
 powerUp1.src = "https://i.imgur.com/BAbtzry.png";
 bomb1.src = "https://i.imgur.com/gQkMLtB.png";
 
+//------------------------Puns------------------------------// 
+var lose1 = "You lost! That SOCKS :-(";
+var lose2 = "Great DRY, butter luck next time.";
+var lose3 = "Best to abandon all SOAP";
+var lose4 = "You just gotta know when to FOLD 'em" ;
+var lose5 = "You lost, but you don't have to BLEACH about it!";
+var lose6 = "Well that was a total WASH";
+
+var win1 = "That was a CLOTHES one! Great job!";
+var win2 = "Way to HANG in there!";
+var win3 = "Get a LOAD of that! You won!";
+var win4 = "WASH like a boss!";
+var win5 = "Excellent DRY!";
+var win6 = "Great score! That was LOADS of fun!";
+
+var loseMsg = [lose1, lose2, lose3, lose4, lose5, lose6]
+var winMsg = [win1, win2, win3, win4, win5, win6]
 //----------------------------------------------------------------//
 
 var importedCanvasX = 650;

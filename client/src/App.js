@@ -7,15 +7,30 @@ import './App.css';
 
 const App = () => {
   const [state, setState] = React.useState({
-    isPlaying : false,
+    hasStarted: false,
+    isPlaying: false,
+    hasWon: false,
   })
 
   // Start or Stop the game when PLAY is clicked.
   let handlePlayClicked = () => {
     const _state = {...state};
+    let hasStarted = _state.hasStarted;
     let isPlaying = _state.isPlaying;
+    let hasWon = _state.hasWon;
+    hasStarted = true;
     isPlaying = true;
-    setState({..._state, isPlaying})
+    hasWon = false;
+    setState({..._state, hasStarted, isPlaying, hasWon});
+  }
+
+  let handleGameOver = (hasWonGame) => {
+    const _state = {...state};
+    let isPlaying = _state.isPlaying;
+    let hasWon = _state.hasWon;
+    isPlaying = false;
+    hasWon = hasWonGame;
+    setState({..._state, isPlaying, hasWon});
   }
 
   return (
@@ -23,7 +38,10 @@ const App = () => {
       <Header startGame={handlePlayClicked}/>
       <Switch>
         <Route exact path="/WashOut">
-          <Home isPlaying={state.isPlaying} />
+          <Home isPlaying={state.isPlaying} 
+                hasStarted={state.hasStarted}
+                hasWon={state.hasWon} 
+                handleGameOver={handleGameOver} />
         </Route>
         <Route exact path="/">
           <Redirect to="/WashOut" />

@@ -6,29 +6,33 @@ import EndScrn from './EndScrn'
 import EndScrnW from './EndScrnW'
 
 const Home = (props) => {
+
+  // Start the game
   if(props.isPlaying) {
     return (
       <div className="App">
-        <Game />
+        <Game handleGameOver={props.handleGameOver} isPlaying={props.isPlaying} />
       </div>
     );
   }
 //******************************FIXME**********************************
-  //elsif win, print win screen
-//   else if(props.hampWin){
-//     <div className="App">
-//       <EndScrnW/>
-//     </div>
-//   }
+  // Game Over -- WIN!
+  else if(props.hasWon){
+    return (
+      <div className="App">
+        <EndScrnW />
+      </div>
+    )
+  }
 
-//   //elsif lose, print lose screen
-//   else if(props.hampLose){
-//   <div className="App">
-//     <EndScrn/>
-//   </div>
-// }
-//***************************************************************** 
-
+// Game Over -- LOSE!
+  else if(!props.hasWon){
+    return (
+      <div className="App">
+        <EndScrn />
+      </div>
+    )
+  }
 
   //print instructions at start of game
   else {

@@ -15,7 +15,16 @@ const Home = (props) => {
       </div>
     );
   }
-//******************************FIXME**********************************
+
+  // Print instructions at start of game
+  else if(!props.hasStarted) {
+    return (
+      <div className="App">
+        <Instr />
+      </div>
+    )
+  }
+
   // Game Over -- WIN!
   else if(props.hasWon){
     return (
@@ -26,7 +35,7 @@ const Home = (props) => {
   }
 
 // Game Over -- LOSE!
-  else if(!props.hasWon){
+  else {
     return (
       <div className="App">
         <EndScrn />
@@ -34,14 +43,7 @@ const Home = (props) => {
     )
   }
 
-  //print instructions at start of game
-  else {
-    return (
-      <div className="App">
-        <Instr />
-      </div>
-    )
-  }
+  
 }
 
 export default Home;

@@ -158,7 +158,7 @@ class Game extends React.Component {
   }
 
   increaseScore(num){
-    score+=num;
+    score += num;
     if(score > 999)
       score = 999;
     if(score == 999) {
@@ -168,7 +168,7 @@ class Game extends React.Component {
   }
   
   decreaseHealth(){
-    health-=1;
+    health -= 1;
     if(health > 0){
       hlthArr.pop();
     } 

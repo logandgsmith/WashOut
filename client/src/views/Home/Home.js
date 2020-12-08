@@ -28,7 +28,7 @@ const Home = (props) => {
   else if(!props.hasStarted) {
     return (
       <div className="App"> 
-        <Instr />
+        <Instr isPlaying={props.isPlaying} />
         
           <FacebookShareButton
             url={url}
@@ -47,7 +47,6 @@ const Home = (props) => {
             <TwitterIcon size={32} round />
 
           </TwitterShareButton>
-
       </div>
 
     )

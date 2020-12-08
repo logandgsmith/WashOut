@@ -4,15 +4,23 @@ import { Nav, Navbar, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 var score = 0
+var hScore = 0
 class Header extends Component {
   constructor(props){
     super(props);
     setInterval(() => this.setState({score:this.loadScore()}),1000)
+    setInterval(() => this.setState({hScore:this.loadHiScore()}),1000)
+
   }
   loadScore = () => {
     var vloc = localStorage.getItem("vLoc");
     score = Number(vloc);
     return score;
+  }
+  loadHiScore = () => {
+    var hLoc = localStorage.getItem("hLoc");
+    hScore = Number(hLoc);
+    return hScore
   }
   
   
@@ -29,7 +37,7 @@ class Header extends Component {
               <Button variant="light" size="lg" onClick={this.props.startGame}>PLAY</Button>
               <Nav className="mr-auto">
               </Nav>
-              <h5 inline className="head3" >Current Score: <span className="currScore"> {score} </span>High Score: <span className="hiScore"> 0</span></h5>
+    <h5 inline className="head3" >Current Score: <span className="currScore"> {score} </span>High Score: <span className="hiScore"> {hScore}</span></h5>
           </Navbar>
       </div>
     );

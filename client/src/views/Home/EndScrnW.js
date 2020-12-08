@@ -6,7 +6,7 @@ bckgr.src = "https://i.imgur.com/gypEplv.png?1";
 //-------------SPRITES FOR CHARACTER MOVEMENT---------------------//
 var hampImageWin = new Image();
 
-hampImageWin.src = "https://i.imgur.com/Bjoe9TB.png";
+hampImageWin.src = "https://i.imgur.com/WyyGb3a.png";
 //------------------------Puns------------------------------//
 
 var win1 = "That was a CLOTHES one! Great job!";

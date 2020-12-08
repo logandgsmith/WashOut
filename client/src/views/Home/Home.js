@@ -20,7 +20,7 @@ const Home = (props) => {
   else if(!props.hasStarted) {
     return (
       <div className="App">
-        <Instr />
+        <Instr isPlaying={props.isPlaying} />
       </div>
     )
   }

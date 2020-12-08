@@ -63,6 +63,10 @@ var powerUp2 = new Image();
 powerUp1.src = blueLaundr;
 powerUp2.src = orangeLaundr;
 
+var score = 0
+var hScore = 0
+
+
 class Instr extends Component{
     state = {
         canvasX: 650,
@@ -73,6 +77,8 @@ class Instr extends Component{
 
 
     draw = () => {
+        localStorage.setItem("hLoc", hScore);
+        localStorage.setItem("vLoc", score);
         const ctx = this.refs.canvas.getContext("2d");
         ctx.drawImage(bckgr,50,0,this.refs.canvas.width-75,this.refs.canvas.height)
     //    ctx.fillStyle="white";
@@ -150,7 +156,7 @@ class Instr extends Component{
         ctx.font = "30px Roboto"
         ctx.textAlign = 'center'
         ctx.fillStyle = 'red'
-        ctx.fillText("PRESS PLAY TO BEGIN!",340,725)
+        ctx.fillText("PRESS PLAY TO BEGIN!",340,750)
     }
 
     componentDidMount() {  

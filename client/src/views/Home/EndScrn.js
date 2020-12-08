@@ -9,7 +9,7 @@ var hampImageLose = new Image();
 hampImageLose.src = "https://i.imgur.com/DzEYjZN.png";
 //------------------------Puns------------------------------//
 var lose1 = "You lost! That SOCKS :-(";
-var lose2 = "Great DRY, butter luck next time.";
+var lose2 = "Great DRY, better luck next time.";
 var lose3 = "Best to abandon all SOAP";
 var lose4 = "You just gotta know when to FOLD 'em";
 var lose5 = "You lost, but you don't have to BLEACH about it!";
@@ -42,7 +42,7 @@ class EndScrn extends Component {
       bckgr,
       50,
       0,
-      this.refs.canvas.width - 75,
+      this.refs.canvas.width - 50,
       this.refs.canvas.height - 350
     );
 
@@ -50,10 +50,10 @@ class EndScrn extends Component {
     var message = getRandomInt(0, 5);
     ctx.drawImage(hampImageLose, 50, 0, 800, 800, 250, 35, 300, 300);
 
-    ctx.font = "30px Roboto";
+    ctx.font = "27px Roboto";
     ctx.fillStyle = "#01C9E1";
     ctx.textAlign = "center";
-    ctx.fillText(loseMsg[message], 340, 275);
+    ctx.fillText(loseMsg[message], 350, 275);
     ctx.font = "20px Roboto";
     ctx.fillStyle = "#01C9E1";
     ctx.textAlign = "center";

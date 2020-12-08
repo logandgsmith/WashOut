@@ -63,10 +63,12 @@ var importedCanvasX = 650;
 var importedCanvasY = 800;
 var numObj = 5;
 var score= 0;
+var hScore = 0;
 var objArr = [];
 var maxHealth = 3;
 var health=3;
 var hlthArr=[];
+var sInter;
 
 // Generates a random integer (min, max inclusive)
 function getRandomInt(min, max){
@@ -154,6 +156,7 @@ class Game extends React.Component {
 
   handleGameOver = () => {
     clearInterval(this.state.gameInterval);
+    clearInterval(sInter)
     this.props.handleGameOver(this.state.hasWonGame);
   }
 
@@ -162,6 +165,7 @@ class Game extends React.Component {
     if(score > 999)
       score = 999;
     if(score == 999) {
+      hScore = score
       this.state.isGameOver = true;
       this.state.hasWonGame = true; // Game Over WIN
     }  
@@ -173,6 +177,9 @@ class Game extends React.Component {
       hlthArr.pop();
     } 
     else{
+      if (score > hScore){
+        hScore = score;
+      }
       this.state.isGameOver = true;
       this.state.hasWonGame = false; // Game Over LOSE
     }
@@ -296,7 +303,7 @@ class Game extends React.Component {
   //update is called every frame
   update = () => {
     localStorage.setItem("vLoc",score);
-
+    localStorage.setItem("hLoc", hScore);
     // Generates and updates Collectible/Obstacle/PowerUp status and sprite
     function updateFallingobject(falling){
       var generator = getRandomInt(0, 20);
@@ -349,6 +356,7 @@ class Game extends React.Component {
             // Check if this item is harmful
             if(objArr[i].isObstacle()){
               this.decreaseHealth();
+              localStorage.setItem("hLoc", hScore);
               this.decreaseScore(10);
               //reset object if it's harmful 
               objArr[i].setRandomX();
@@ -412,6 +420,7 @@ class Game extends React.Component {
           return;
       }
     }
+    
   };
   
 //------------------------------LISTENERS----------------------------------//
@@ -557,7 +566,9 @@ class Game extends React.Component {
       setMaxHealth();
       setInitialItems();
       score = 0;
-
+      sInter = setInterval(() => {
+        this.increaseScore(1);
+      },1000)
       // Start the gameplay loop
       this.state.gameInterval = setInterval(() => {
         this.update();
@@ -568,9 +579,7 @@ class Game extends React.Component {
       }, 1000 / 60); //1000 milliseconds divided by 60 seconds = 60fps
 
       // Start a score timer
-      setInterval(() => {
-        this.increaseScore(1);
-      },1000)
+      
 
       // Begin Listening
       this.listen();

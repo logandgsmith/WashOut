@@ -24,3 +24,9 @@
 header{
     background-color: #282c34;
 }
+.share-button {
+    align-items: center;
+    display: inline-block;
+    margin-right: 10px;
+    text-align: center;
+}

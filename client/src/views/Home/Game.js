@@ -535,9 +535,9 @@ class Game extends React.Component {
         y: this.state.canvasY - (this.state.charScale),
         //x is variable and is moved by integer value
         //dont let it go all the way to the max
-        x: Math.max(
+        x: Math.min(
           this.state.character.x + 8,
-          (this.state.charScale/2)
+           importedCanvasX - (this.state.charScale/2)
         ),
         radius: 20,
         currentDirection: hampRight1,
@@ -579,7 +579,7 @@ class Game extends React.Component {
 
   render() {
     return (
-      <div class=".container">
+      <div data-testid="gameclass" class=".container">
         <canvas
           ref="canvas"
           width={this.state.canvasX}

@@ -429,53 +429,27 @@ class Game extends React.Component {
     // Pressing the left arrow
     document.addEventListener("keydown", (e) =>
       e.keyCode === 37
-      ? this.moveLeft()
+      ? this.leftPress()
         : null
         );
     // Pressing the right arrow
     document.addEventListener("keydown", (e) =>
       e.keyCode === 39
-        ? this.moveRight()
+        ? this.rightPress()
         : null
     );
 
     // Releasing the Left arrow 
     document.addEventListener("keyup", (e) =>
     e.keyCode === 37
-      ? this.setState({
-          character: {
-            //y is constant
-            y: this.state.canvasY - this.state.charScale,
-            //don't let it go all the way out of the canvas
-            x: Math.max(
-                this.state.character.x - 8,
-                - (this.state.charScale/2)
-            ),
-            radius: 20,
-            currentDirection: hampImage,
-            stillMoving: false,
-          },
-        })
+      ? this.releasePress()
       : null
     );
 
     //Releasing the right arrow
     document.addEventListener("keyup", (e) =>
     e.keyCode === 39
-      ? this.setState({
-          character: {
-            //y is constant
-            y: this.state.canvasY - (this.state.charScale),
-            //don't let it go all the way out of the canvas
-            x: Math.min(
-              this.state.character.x + 8,
-              this.state.canvasX - (this.state.charScale/2)
-            ),
-            radius: 20,
-            currentDirection: hampImage,
-            stillMoving: false,
-          },
-        })
+      ? this.releasePress()
       : null
     );
   }

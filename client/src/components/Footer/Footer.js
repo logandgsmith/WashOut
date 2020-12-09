@@ -11,7 +11,6 @@ const Footer = (props) => {
         <div className="footer">
             <FacebookShareButton
                 url={url}
-                appid = {384310982877471}
                 quote={message}
                 className="share-button">
                 <FacebookIcon size={32} round />

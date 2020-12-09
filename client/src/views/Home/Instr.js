@@ -109,6 +109,9 @@ class Instr extends Component{
                 100,
                 )
         }
+        ctx.font = "16px Roboto"
+        ctx.fillStyle = "#808080"
+        ctx.textAlign = "left"
         ctx.fillText("Power-Ups:",150,620)
         ctx.drawImage(
             powerUp1,

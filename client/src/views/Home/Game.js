@@ -62,12 +62,10 @@ bomb1.src = "https://i.imgur.com/gQkMLtB.png";
 var importedCanvasX = 650;
 var importedCanvasY = 800;
 var numObj = 5;
-var hScore = 0;
 var objArr = [];
 var maxHealth = 3;
 var health=3;
 var hlthArr=[];
-var sInter;
 
 // Generates a random integer (min, max inclusive)
 function getRandomInt(min, max){
@@ -121,6 +119,7 @@ class Game extends React.Component {
     this.state = {
       // Game Flow Variables
       gameInterval: null,
+      scoreInterval: null,
       isGameOver: false,
       hasWonGame: false,
       // Canvas and positioning
@@ -158,7 +157,7 @@ class Game extends React.Component {
 
   handleGameOver = () => {
     clearInterval(this.state.gameInterval);
-    clearInterval(sInter)
+    clearInterval(this.state.scoreInterval);
 
     if (this.props.score > this.props.hiScore) {
       this.props.handleNewHiScore(this.props.score);
@@ -493,6 +492,11 @@ class Game extends React.Component {
 
 //---------------------------------MOVEMENT LOGIC-------------------------------//
   moveLeft = () => {
+    // Check directions
+    var nextImage = hampLeft1;
+    if(this.state.character.currentDirection == hampLeft1)
+      nextImage = hampLeft2;
+
     this.setState({
       character: {
         //y is constante
@@ -504,13 +508,18 @@ class Game extends React.Component {
           - (this.state.charScale/2)
         ),
         radius: 20,
-        currentDirection: hampLeft1,
+        currentDirection: nextImage,
         stillMoving: true,
       },
     })
   }
 
   moveRight = () => {
+    // Change directions
+    var nextImage = hampRight1;
+    if(this.state.character.currentDirection == hampRight1)
+      nextImage = hampRight2;
+
     this.setState({
       character: {
         //y is constante
@@ -522,7 +531,7 @@ class Game extends React.Component {
            importedCanvasX - (this.state.charScale/2)
         ),
         radius: 20,
-        currentDirection: hampRight1,
+        currentDirection: nextImage,
         stillMoving: true,
       },
     })
@@ -538,9 +547,12 @@ class Game extends React.Component {
       // Reset values
       setMaxHealth();
       setInitialItems();
-      sInter = setInterval(() => {
+
+      // Start Score timer
+      this.state.scoreInterval = setInterval(() => {
         this.handleScoreUpdate(1);
       },1000)
+
       // Start the gameplay loop
       this.state.gameInterval = setInterval(() => {
         this.update();
@@ -549,9 +561,6 @@ class Game extends React.Component {
         if(this.state.isGameOver)
           this.handleGameOver();
       }, 1000 / 60); //1000 milliseconds divided by 60 seconds = 60fps
-
-      // Start a score timer
-      
 
       // Begin Listening
       this.listen();

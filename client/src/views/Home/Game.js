@@ -62,7 +62,6 @@ bomb1.src = "https://i.imgur.com/gQkMLtB.png";
 var importedCanvasX = 650;
 var importedCanvasY = 800;
 var numObj = 5;
-var score= 0;
 var hScore = 0;
 var objArr = [];
 var maxHealth = 3;
@@ -147,7 +146,10 @@ class Game extends React.Component {
       },
     };
 
+    // React Handlers
     this.handleGameOver = this.handleGameOver.bind();
+    this.handleScoreUpdate = this.handleScoreUpdate.bind();
+
     //At some point the x values will have to be set to some proportionality of the window size
     //that might have to be different for different devices
   }
@@ -157,39 +159,34 @@ class Game extends React.Component {
   handleGameOver = () => {
     clearInterval(this.state.gameInterval);
     clearInterval(sInter)
+
+    if (this.props.score > this.props.hiScore) {
+      this.props.handleNewHiScore(this.props.score);
+    }
+
     this.props.handleGameOver(this.state.hasWonGame);
   }
 
-  increaseScore(num){
-    score += num;
-    if(score > 999)
-      score = 999;
-    if(score == 999) {
-      hScore = score
+  handleScoreUpdate = (points) => {
+    this.props.handleScoreUpdate(points); 
+
+    if(this.props.score >= 999) {
       this.state.isGameOver = true;
       this.state.hasWonGame = true; // Game Over WIN
-    }  
+    }
   }
-  
+ 
   decreaseHealth(){
     health -= 1;
     if(health > 0){
       hlthArr.pop();
     } 
     else{
-      if (score > hScore){
-        hScore = score;
-      }
       this.state.isGameOver = true;
       this.state.hasWonGame = false; // Game Over LOSE
     }
   }
 
-  decreaseScore(num){
-    score-=num
-    if(score < 0)
-      score = 0;
-  }
   
   increaseHealth(){
     if(health === 2){
@@ -302,8 +299,6 @@ class Game extends React.Component {
 
   //update is called every frame
   update = () => {
-    localStorage.setItem("vLoc",score);
-    localStorage.setItem("hLoc", hScore);
     // Generates and updates Collectible/Obstacle/PowerUp status and sprite
     function updateFallingobject(falling){
       var generator = getRandomInt(0, 20);
@@ -351,18 +346,18 @@ class Game extends React.Component {
       if(objArr[i].y >= this.state.character.y + 15) {
         // Check for collisions with the player
         if(this.state.character.radius * 2 >= Math.abs(objArr[i].x - (this.state.character.x + this.state.character.radius * 2 * (this.state.charScale / 100)))) {
-            objArr[i].onCollide(); // Trigger the onCollide function
 
-            // Check if this item is harmful
+            // Check if this item is Obstacle
             if(objArr[i].isObstacle()){
               this.decreaseHealth();
-              localStorage.setItem("hLoc", hScore);
-              this.decreaseScore(10);
+              this.handleScoreUpdate(-10);
               //reset object if it's harmful 
               objArr[i].setRandomX();
               objArr[i].setY(objArr[i].defaultY);
               updateFallingobject(objArr[i]);
             }
+
+            // Check if object is a bomb powerup
             else if(objArr[i].isBomb()){
               //if is bomb we increase score and reset all objects to default y
               for (var i = 0; i < objArr.length; i++) {
@@ -370,19 +365,23 @@ class Game extends React.Component {
                 objArr[i].setY(objArr[i].defaultY);
                 updateFallingobject(objArr[i]);
               }
-              this.increaseScore(10);
+              this.handleScoreUpdate(10);
               continue;
             }
+
+            // Check if object is a powerup
             else if (objArr[i].isPowerUp()){
-              this.increaseScore(10);
+              this.handleScoreUpdate(10);
               // Reset the object
               objArr[i].setRandomX();
               objArr[i].setY(objArr[i].defaultY);
               // add life if applicable
               this.increaseHealth();
             }
+
+            // Else it is a collectible
             else{ 
-              this.increaseScore(10);
+              this.handleScoreUpdate(10);
             // Reset the object
             objArr[i].setRandomX();
             objArr[i].setY(objArr[i].defaultY);
@@ -539,9 +538,8 @@ class Game extends React.Component {
       // Reset values
       setMaxHealth();
       setInitialItems();
-      score = 0;
       sInter = setInterval(() => {
-        this.increaseScore(1);
+        this.handleScoreUpdate(1);
       },1000)
       // Start the gameplay loop
       this.state.gameInterval = setInterval(() => {

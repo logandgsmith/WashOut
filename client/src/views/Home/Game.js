@@ -345,7 +345,7 @@ class Game extends React.Component {
       // Check for collisions
       if(objArr[i].y >= this.state.character.y + 15) {
         // Check for collisions with the player
-        if(this.state.character.radius * 2 >= Math.abs(objArr[i].x - (this.state.character.x + this.state.character.radius * 2 * (this.state.charScale / 100)))) {
+        if((this.state.character.radius * 2) >= Math.abs(-15 + objArr[i].x - (this.state.character.x + this.state.character.radius * 2 * (this.state.charScale / 100)))) {
 
             // Check if this item is Obstacle
             if(objArr[i].isObstacle()){

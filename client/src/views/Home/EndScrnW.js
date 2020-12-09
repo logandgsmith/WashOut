@@ -1,12 +1,15 @@
 import React, { Component } from "react";
+import background from "../../assets/menuBackground.png";
+import hampWin from "../../assets/hmpWon.png";
+
 
 var bckgr = new Image();
-bckgr.src = "https://i.imgur.com/gypEplv.png?1";
+bckgr.src = background;
 
 //-------------SPRITES FOR CHARACTER MOVEMENT---------------------//
 var hampImageWin = new Image();
 
-hampImageWin.src = "https://i.imgur.com/WyyGb3a.png";
+hampImageWin.src = hampWin;
 //------------------------Puns------------------------------//
 
 var winMsg = [

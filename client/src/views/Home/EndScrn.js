@@ -1,12 +1,14 @@
 import React, { Component } from "react";
+import background from "../../assets/menuBackground.png";
+import hmpLose from "../../assets/hmpLose.png";
 
 var bckgr = new Image();
-bckgr.src = "https://i.imgur.com/gypEplv.png?1";
+bckgr.src = background;
 
 //-------------SPRITES FOR CHARACTER MOVEMENT---------------------//
 var hampImageLose = new Image();
 
-hampImageLose.src = "https://i.imgur.com/DzEYjZN.png";
+hampImageLose.src = hmpLose;
 //------------------------Puns------------------------------//
 var loseMsg = [
   "You lost! That SOCKS :-(",

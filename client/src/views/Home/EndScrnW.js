@@ -42,9 +42,8 @@ class EndScrnW extends Component {
       50,
       0,
       this.refs.canvas.width - 75,
-      this.refs.canvas.height - 350
+      this.refs.canvas.height - 35
     );
-
 
     var message = getRandomInt(0, 5);
     ctx.drawImage(hampImageWin, 50, 0, 800, 800, 250, 35, 300, 300);
@@ -53,10 +52,20 @@ class EndScrnW extends Component {
     ctx.fillStyle = "#01C9E1";
     ctx.textAlign = "center";
     ctx.fillText(winMsg[message], 340, 275);
-    ctx.font = "20px Roboto";
+    ctx.font = "25px Roboto";
     ctx.fillStyle = "#01C9E1";
-    ctx.textAlign = "center";
     ctx.fillText("Press Play to try again!", 340, 325);
+
+    ctx.font = "20px Roboto";
+    ctx.textAlign = "center";
+    ctx.fillText("This game was designed by:", 340, 370);
+    ctx.textAlign = "left"
+    ctx.fillText("Tess Christensen....Queen of Mount Laundry", 110, 415);
+    ctx.fillText("Juan Ruiz.................Commander-in-Chips Juan", 110, 440);
+    ctx.fillText("Logan Smith............President Logan of Potato Peeling", 110, 465);
+    ctx.fillText("Jarret Torres............Chief Eating Officer (CEO)", 110, 490);
+    ctx.fillText("Connor Wilson.........Captain Collectible", 110, 515);
+
   };
   componentDidMount() {
     this.draw();

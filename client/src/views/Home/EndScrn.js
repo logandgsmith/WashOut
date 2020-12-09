@@ -58,6 +58,7 @@ class EndScrn extends Component {
     ctx.fillStyle = "#01C9E1";
     ctx.textAlign = "center";
     ctx.fillText("Press Play to try again!", 340, 325);
+    
   };
   
   componentDidMount() {

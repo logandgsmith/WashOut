@@ -62,7 +62,7 @@ class EndScrnW extends Component {
     ctx.textAlign = "left"
     ctx.fillText("Tess Christensen....Queen of Mount Laundry", 110, 415);
     ctx.fillText("Juan Ruiz.................Commander-in-Chips Juan", 110, 440);
-    ctx.fillText("Logan Smith............President Logan of Potato Peeling", 110, 465);
+    ctx.fillText("Logan Smith............President of Potato Peeling", 110, 465);
     ctx.fillText("Jarret Torres............Chief Eating Officer (CEO)", 110, 490);
     ctx.fillText("Connor Wilson.........Captain Collectible", 110, 515);
 

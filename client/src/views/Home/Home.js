@@ -1,17 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './Home.css';
 import Game from './Game';
 import Instr from './Instr';
-import EndScrn from './EndScrn'
-import EndScrnW from './EndScrnW'
+import EndScrn from './EndScrn';
+import EndScrnW from './EndScrnW';
+
 
 const Home = (props) => {
-
   // Start the game
   if(props.isPlaying) {
     return (
       <div className="App">
-        <Game handleGameOver={props.handleGameOver} isPlaying={props.isPlaying} />
+        <Game score={props.score}
+              hiScore={props.hiScore}
+              handleGameOver={props.handleGameOver}
+              handleScoreUpdate={props.handleScoreUpdate}
+              handleNewHiScore={props.handleNewHiScore}
+              isPlaying={props.isPlaying} />
       </div>
     );
   }
@@ -19,9 +24,10 @@ const Home = (props) => {
   // Print instructions at start of game
   else if(!props.hasStarted) {
     return (
-      <div className="App">
+      <div className="App"> 
         <Instr isPlaying={props.isPlaying} />
       </div>
+
     )
   }
 

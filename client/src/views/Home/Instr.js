@@ -160,7 +160,7 @@ class Instr extends Component{
     componentDidMount() {  
         this.state.drawInterval = setInterval(() => {
             this.draw();
-        }, 1000);
+        }, 250);
         this.drawText();
     }
     render(){

@@ -9,13 +9,14 @@ var hampImageWin = new Image();
 hampImageWin.src = "https://i.imgur.com/WyyGb3a.png";
 //------------------------Puns------------------------------//
 
-var win1 = "That was a CLOTHES one! Great job!";
-var win2 = "Way to HANG in there!";
-var win3 = "Get a LOAD of that! You won!";
-var win4 = "WASH like a boss!";
-var win5 = "Excellent DRY!";
-var win6 = "Great score! That was LOADS of fun!";
-var winMsg = [win1, win2, win3, win4, win5, win6];
+var winMsg = [
+  "That was a CLOTHES one! Great job!",
+  "Way to HANG in there!",
+  "Get a LOAD of that! You won!",
+  "WASH like a boss!",
+  "Excellent DRY!",
+  "Great score! That was LOADS of fun!",
+]
 
 function getRandomInt(min, max) {
   var minimum = Math.ceil(min);
@@ -61,8 +62,8 @@ class EndScrnW extends Component {
     ctx.fillText("This game was designed by:", 340, 370);
     ctx.textAlign = "left"
     ctx.fillText("Tess Christensen....Queen of Mount Laundry", 110, 415);
-    ctx.fillText("Juan Ruiz.................Commander-in-Chips Juan", 110, 440);
-    ctx.fillText("Logan Smith............President Logan of Potato Peeling", 110, 465);
+    ctx.fillText("Juan Ruiz.................Commander-in-Chips", 110, 440);
+    ctx.fillText("Logan Smith............President of Potato Peeling", 110, 465);
     ctx.fillText("Jarret Torres............Chief Eating Officer (CEO)", 110, 490);
     ctx.fillText("Connor Wilson.........Captain Collectible", 110, 515);
 

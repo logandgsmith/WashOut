@@ -2,10 +2,33 @@ import React, { Component } from "react";
 import fallingObject from "./Objects.js";
 import "./Game.css";
 
+import background from "../../assets/laundromat.png"
+import hampImg from "../../assets/hampImage.png";
+import hampL1 from "../../assets/hmpL1.png"
+import hampL2 from "../../assets/hmpL2.png"
+import hampR1 from "../../assets/hmpR1.png"
+import hampR2 from "../../assets/hmpR2.png"
+
+import pen from "../../assets/pen.png";
+import dollar from "../../assets/dollar.png";
+import football from "../../assets/football.png";
+import gum from "../../assets/gum.png";
+import key from "../../assets/key.png";
+
+import orangeTee from "../../assets/orangeTee.png";
+import blueSock from "../../assets/blueSock.png";
+import underwear from "../../assets/underwear.png";
+import dress from "../../assets/dress.png";
+import blackTee from "../../assets/blackTee.png";
+
+import blueLaundr from "../../assets/blueLaundr.png";
+import orangeLaundr from "../../assets/orangeLaundr.png";
+
+
 //MUST PRESS RIGHT OR LEFT ARROW TO RENDER HAMPERMAN IN FRAME
 //background
 var laundrBG = new Image();
-laundrBG.src = "https://i.imgur.com/o1SC3Vi.png"
+laundrBG.src = background;
 
 //-------------SPRITES FOR CHARACTER MOVEMENT---------------------// 
 var hampImage   = new Image();
@@ -14,11 +37,11 @@ var hampLeft2   = new Image();
 var hampRight1  = new Image();
 var hampRight2  = new Image();
 
-hampImage.src   = "https://i.imgur.com/EKlTCEr.png";
-hampLeft1.src   = "https://i.imgur.com/hiur78h.png";
-hampLeft2.src   = "https://i.imgur.com/RIR3EBU.png";
-hampRight1.src  = "https://i.imgur.com/74yDjMt.png";
-hampRight2.src  = "https://i.imgur.com/ekzDUeJ.png";
+hampImage.src   = hampImg;
+hampLeft1.src   = hampL1;
+hampLeft2.src   = hampL2;
+hampRight1.src  = hampR1;
+hampRight2.src  = hampR2;
 
 //---------------SPRITES FOR FALLING OBJECTS-----------------------// 
 
@@ -28,11 +51,11 @@ var obstacle3 = new Image();
 var obstacle4 = new Image();
 var obstacle5 = new Image();
 
-obstacle1.src = "https://i.imgur.com/H5upRrj.png";
-obstacle2.src = "https://i.imgur.com/DR8Lrt9.png";
-obstacle3.src = "https://i.imgur.com/1nrBB8v.png";
-obstacle4.src = "https://i.imgur.com/htEvYeG.png";
-obstacle5.src = "https://i.imgur.com/ShmivUw.png";
+obstacle1.src = pen;
+obstacle2.src = dollar;
+obstacle3.src = football;
+obstacle4.src = gum;
+obstacle5.src = key;
 
 var obstacles = [obstacle1, obstacle2, obstacle3, obstacle4, obstacle5]
 
@@ -42,19 +65,19 @@ var collectible3 = new Image();
 var collectible4 = new Image();
 var collectible5 = new Image();
 
-collectible1.src = "https://i.imgur.com/TIhKbTM.png";
-collectible2.src = "https://i.imgur.com/hRORvbR.png";
-collectible3.src = "https://i.imgur.com/xJLNr2B.png";
-collectible4.src = "https://i.imgur.com/d3BBLdz.png";
-collectible5.src = "https://i.imgur.com/pum5vSq.png";
+collectible1.src = orangeTee;
+collectible2.src = blueSock;
+collectible3.src = blackTee;
+collectible4.src = dress;
+collectible5.src = underwear;
 
 var collectibles = [collectible1, collectible2, collectible3, collectible4, collectible5];
 
 var powerUp1 = new Image();
 var bomb1 = new Image();
 
-powerUp1.src = "https://i.imgur.com/BAbtzry.png";
-bomb1.src = "https://i.imgur.com/gQkMLtB.png";
+powerUp1.src = blueLaundr;
+bomb1.src = orangeLaundr;
 
 
 //----------------------------------------------------------------//

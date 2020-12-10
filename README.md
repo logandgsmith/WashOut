@@ -1,5 +1,5 @@
 # WashOut!
-A simple browser game created as a fun easter egg if a user encounters a 404 error on [The Laundr Website](https://www.laundr.io/).
+A simple browser game created as a fun easter egg if a user encounters a 404 error on [The Laundr Website](https://www.laundr.io/). Please checkout the [live application](https://washout.herokuapp.com/WashOut).
 
 ## Before You Begin
 This application no longer uses a database to comply with the request that no customer information be kept. If needs change and a database is needed, uncomment the lines at the beginning of

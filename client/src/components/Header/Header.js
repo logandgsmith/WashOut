@@ -2,13 +2,14 @@ import React, {Component} from "react";
 import "./Header.css";
 import { Nav, Navbar, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import logo from "../../assets/logo.png"
 
 class Header extends Component {  
   render(){
     return (
       <div className="topnav" >
         {/* Logo */}
-        <a href="https://www.laundr.io/"><img src="https://i.imgur.com/nhjOSV3.png" /></a>
+        <a href="https://www.laundr.io/"><img src={logo} /></a>
         <p id="title">WashOut!</p>
         <p id="apology">Sorry we couldn't find the page you were looking for, but please enjoy this special game instead</p>
 
